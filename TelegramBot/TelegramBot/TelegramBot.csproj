@@ -130,6 +130,7 @@
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\dbService.cs" />
     <Compile Include="Models\KeyBord.cs" />
+    <Compile Include="Models\PropertyUserTelegram.cs" />
     <Compile Include="Models\TelegramClass.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

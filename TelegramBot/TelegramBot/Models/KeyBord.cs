@@ -78,12 +78,12 @@ namespace GoogleMapBot.Models
                 for (var i = 0; i < col; i++)
                 {
 
-                    keyboardButtons[j] = new InlineKeyboardButton
+                    keyboardButtons[i] = new InlineKeyboardButton
                     {
-                        Text = stringArray[j],
-                        CallbackData = stringArray[j],
+                        Text = stringArray[IndexstringArray],
+                        CallbackData = stringArray[IndexstringArray],
 
-
+                        
 
                     };
                     if (Link != "")
@@ -99,7 +99,7 @@ namespace GoogleMapBot.Models
         }
 
 
-        public static string[] Menu = { "ثبت نام", "چت رندوم", "ورد به سایت", "رهنمایی", "درباره ما" };
-        public static string[] Profile = { "نام", "جنسیت", "سن", "Bio", };
+        public static string[] Menu = { "پروفایل", "چت رندوم", "ورد به سایت", "رهنمایی", "درباره ما" };
+        public static string[] Profile = { "نام","جنسیت","سن","Bio" };
     }
 }
