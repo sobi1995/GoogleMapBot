@@ -99,7 +99,7 @@ namespace GoogleMapBot.Models
         }
 
 
-        public static string[] Menu = { "پروفایل", "چت رندوم", "ورد به سایت", "رهنمایی", "درباره ما" };
-        public static string[] Profile = { "نام","جنسیت","سن","Bio" };
+        public static List<string> Menu =new   List<string>() { "پروفایل", "چت رندوم", "ورد به سایت", "رهنمایی", "درباره ما" };
+        public static List<string> Profile =new     List<string>() { "نام","سن","Bio" };
     }
 }
