@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Help\JavaScript.js" />
     <Content Include="Help\TextFile1.txt" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -128,6 +129,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ccc.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\dbService.cs" />
     <Compile Include="Models\KeyBord.cs" />
