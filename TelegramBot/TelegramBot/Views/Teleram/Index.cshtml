@@ -22,8 +22,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
     
-        if (typeof (EventSource) !== "undefined") {
-            debugger;
+    
             var source = new EventSource("Test");
 
             source.onmessage = function (event) {
@@ -31,9 +30,7 @@
           
                 document.getElementById("result").innerHTML += event.data + "<br>";
             };
-        } else {
-            document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
-        }
+        
 
 
    

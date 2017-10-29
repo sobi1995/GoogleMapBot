@@ -21,6 +21,8 @@ namespace TelegramBot
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Migrations.Configuration>());
+       
+
         }
     }
 }
