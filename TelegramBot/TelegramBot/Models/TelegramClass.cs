@@ -6,6 +6,7 @@ using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
+using TelegramBot.Hubs;
 using TelegramBot.Models;
 
 namespace GoogleMapBot.Models
@@ -22,6 +23,11 @@ namespace GoogleMapBot.Models
             Bot.OnMessage += Bot_OnMessage;
             Bot.OnUpdate += Bot_OnUpdate;
             _dbService = new dbService();
+        }
+        public void SendLocationToClint(string  x,string    y) {
+            ChatHub h = new ChatHub();
+            h.Send(x,y,x,y);
+
         }
         async void SedMsg(long id, string Txt)
         {
@@ -59,6 +65,14 @@ namespace GoogleMapBot.Models
 
 
             }
+            else if (e.Update.Message.Location!=null)
+            {
+                string x = e.Update.Message.Location.Latitude.ToString() ;
+                string y = e.Update.Message.Location.Longitude.ToString();
+                SendLocationToClint(x,y);
+            }
+         
+
 
         }
 
