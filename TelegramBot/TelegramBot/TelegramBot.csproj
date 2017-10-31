@@ -47,6 +47,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.1.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -161,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="goooglemap.html" />
     <Content Include="Help\JavaScript.js" />
     <Content Include="Help\TextFile1.txt" />
     <Content Include="Chat.html" />
@@ -168,6 +173,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="packages.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Entity\GooogleMapBot.js" />
     <Content Include="Scripts\Entity\Telegram.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -196,6 +202,7 @@
     <Compile Include="Models\dbService.cs" />
     <Compile Include="Models\KeyBord.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\Profile.cs" />
     <Compile Include="Models\PropertyUserTelegram.cs" />
     <Compile Include="Models\TelegramClass.cs" />
     <Compile Include="Models\User.cs" />

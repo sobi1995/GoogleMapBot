@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -24,9 +25,19 @@ namespace GoogleMapBot.Models
             Bot.OnUpdate += Bot_OnUpdate;
             _dbService = new dbService();
         }
-        public void SendLocationToClint(string  x,string    y) {
+        public void SendLocationToClint(string  x,string    y,long id) {
             ChatHub h = new ChatHub();
-            h.Send(x,y,x,y);
+            var UserLocation = _dbService.GetUser(id);
+
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Profile, User>()
+                   .ReverseMap();
+            });
+            var a = Mapper.Map<Profile>(UserLocation);
+            a.X = x;
+            a.Y = y;
+            h.Send(a);
 
         }
         async void SedMsg(long id, string Txt)
@@ -69,7 +80,7 @@ namespace GoogleMapBot.Models
             {
                 string x = e.Update.Message.Location.Latitude.ToString() ;
                 string y = e.Update.Message.Location.Longitude.ToString();
-                SendLocationToClint(x,y);
+                SendLocationToClint(x,y,e.Update.Message.From.Id);
             }
          
 

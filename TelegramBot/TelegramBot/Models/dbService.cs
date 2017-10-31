@@ -8,10 +8,10 @@ namespace GoogleMapBot.Models
 {
     public class dbService
     {
-        private Context _db= new Context();
+        private Context _db;
         public dbService()
         {
-            
+            _db = new Context();
         }
         public  int AddWhenStart(PropertyUserTelegram Ueser) {
 
@@ -39,7 +39,7 @@ namespace GoogleMapBot.Models
         }
         public User GetUser(long id)
         {
-
+            var r = _db.User.Where(x => x.id.Equals(id)).FirstOrDefault();
             return _db.User.Where(x => x.id==id).FirstOrDefault();
 
         }
