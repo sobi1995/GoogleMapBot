@@ -24,12 +24,7 @@
         <ul id="discussion"></ul>
 
     </div>
-
-    <div style="width:90%;position:center;margin:auto;background-color:azure" id="googleMap">
-
-
-
-    </div>
+ <input type="button" id="ss" />
 
     <script>
         $(function () {
@@ -38,7 +33,7 @@
 
             chat.client.addNewMessageToPage = function (message) {
                 debugger;
-
+                Setmarker(message.X, message.Y);
                 $('#discussion').append('<li> ' + htmlEncode(message) + '</li>');
             };
 
@@ -62,8 +57,50 @@
     </script>
 
 
+ <h1>My First Google Map</h1>
+
+    <div id="googleMap" style="width:100%;height:400px;"></div>
+
+    <script>
+function myMap() {
+var mapProp= {
+    center:new google.maps.LatLng(51.508742,-0.120850),
+    zoom:5,
+};
+var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+}
 
 
+
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-VzC5wzLDvJKUtnTbzj4AeQ5DwF9FJ3U&callback=myMap"></script>
+
+
+
+   
 </body>
 </html>
+<script>
+    function Setmarker(x, y) {
+        var myLatlng = new google.maps.LatLng(x, y);
+        var mapOptions = {
+            zoom: 4,
+            center: myLatlng
+        }
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
 
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            title: "Hello World!"
+        });
+
+        // To add the marker to the map, call setMap();
+        marker.setMap(map);
+
+
+    }
+    
+  
+</script>
+  
