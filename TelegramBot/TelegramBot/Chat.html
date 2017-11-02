@@ -27,13 +27,18 @@
  <input type="button" id="ss" />
 
     <script>
+       
         $(function () {
 
             var chat = $.connection.chatHub;
 
             chat.client.addNewMessageToPage = function (message) {
                 debugger;
-                Setmarker(message.X, message.Y);
+                //var res = str.replace("Microsoft", "W3Schools");
+                let x = message.X.replace("/", ".");
+                let y = message.Y.replace("/", ".");;
+                addMarker(x,y );
+            
                 $('#discussion').append('<li> ' + htmlEncode(message) + '</li>');
             };
 
@@ -61,46 +66,45 @@
 
     <div id="googleMap" style="width:100%;height:400px;"></div>
 
+   
     <script>
-function myMap() {
-var mapProp= {
-    center:new google.maps.LatLng(51.508742,-0.120850),
-    zoom:5,
-};
-var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-}
+  var map;
+      function initMap() {
+        var myLatLng = {lat: -25.363, lng: 131.044};
+
+        map = new google.maps.Map(document.getElementById('googleMap'), {
+          zoom: 4,
+          center: myLatLng
+        });
+
+       
+
+      }
 
 
 
+      function addMarker(x,y){
+          debugger;
+          //x = 35.70092;
+          //y = 51.42287;
+          var myLatLng = { lat: parseFloat(x), lng:parseFloat(y) };
+      var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: 'Hello World!'
+        });
+
+      }
     </script>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-VzC5wzLDvJKUtnTbzj4AeQ5DwF9FJ3U&callback=myMap"></script>
+    <script 
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-VzC5wzLDvJKUtnTbzj4AeQ5DwF9FJ3U&callback=initMap">
+    </script>
+   
 
 
 
    
 </body>
 </html>
-<script>
-    function Setmarker(x, y) {
-        var myLatlng = new google.maps.LatLng(x, y);
-        var mapOptions = {
-            zoom: 4,
-            center: myLatlng
-        }
-        var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
-
-        var marker = new google.maps.Marker({
-            position: myLatlng,
-            title: "Hello World!"
-        });
-
-        // To add the marker to the map, call setMap();
-        marker.setMap(map);
-
-
-    }
-    
-  
-</script>
+ 
   
