@@ -43,11 +43,9 @@ namespace GoogleMapBot.Models
         async void SedMsg(long id, string Txt)
         {
 
-
+           
             await Bot.SendTextMessage(id, Txt);
         }
-
-
         private void Bot_OnUpdate(object sender, UpdateEventArgs e)
         {
             var Message = e.Update;
@@ -86,7 +84,6 @@ namespace GoogleMapBot.Models
 
 
         }
-
         public void Start()
         {
 
@@ -94,6 +91,7 @@ namespace GoogleMapBot.Models
         }
         private async void Bot_OnMessage(object sender, MessageEventArgs e)
         {
+         
             var message = e.Message;
 
             if (message.Text == "/start")
@@ -121,7 +119,7 @@ namespace GoogleMapBot.Models
                 string Profile = "FirstName : " + Me.FirstName + "\n lastName : " + Me.lastName
                     + "\n UserName : " + Me.UserName + "\n Name : " + Me.Name
                    + Me.Age + "\n Discraption : " + Me.Discraption;
-
+                SedPhotoProile(message.Chat.Id, "Sdfsd");
                 List<string> NullFild = _dbService.ProfileNull(message.Chat.Id);
                 if (NullFild.Count <= 0)
                 {
@@ -178,5 +176,14 @@ namespace GoogleMapBot.Models
 
             }
         }
+
+        async void SedPhotoProile(long id, string Txt)
+        {
+            Telegram.Bot.Types.UserProfilePhotos photo = Bot.GetUserProfilePhotosAsync(Int32.Parse(id.ToString())).Result;
+           
+
+             //await Bot.SendPhoto(id,photo.Photos,"sdfsdf");
+        }
+
     }
 }

@@ -68,6 +68,7 @@
 
    
     <script>
+        
   var map;
       function initMap() {
         var myLatLng = {lat: -25.363, lng: 131.044};
@@ -81,19 +82,28 @@
 
       }
 
-
-
+      
+      var marker;
       function addMarker(x,y){
           debugger;
-          //x = 35.70092;
-          //y = 51.42287;
-          var myLatLng = { lat: parseFloat(x), lng:parseFloat(y) };
-      var marker = new google.maps.Marker({
+          var infoWindow = new google.maps.InfoWindow();
+          var myLatLng = { lat: parseFloat(x), lng: parseFloat(y) };
+         
+          data = marker;
+        marker = new google.maps.Marker({
           position: myLatLng,
           map: map,
           title: 'Hello World!'
         });
+        
 
+        (function (marker, data) {
+            google.maps.event.addListener(marker, "click", function (e) {
+                //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
+                infoWindow.setContent("<div style = 'width:200px;min-height:40px'>" + "dssdf" + "</div>");
+                infoWindow.open(map, marker);
+            });
+        })(marker, data);
       }
     </script>
     <script 
