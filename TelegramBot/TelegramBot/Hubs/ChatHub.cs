@@ -21,7 +21,7 @@ namespace TelegramBot.Hubs
         public void brodcast( string message)
         {
             // Call the addNewMessageToPage method to update clients.
-            Clients.All.addNewMessageToPage(message);
+            Clients.All.MessageBrodcast(message);
         }
     }
 }

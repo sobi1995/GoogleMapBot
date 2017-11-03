@@ -20,7 +20,7 @@ namespace TelegramBot
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Migrations.Configuration>());
+           Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Migrations.Configuration>());
            
 
         }
