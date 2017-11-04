@@ -20,6 +20,8 @@ namespace GoogleMapBot.Models
         public string Name { get; set; }
         public string Discraption { get; set; }
          public byte Sex { get; set; }
+ 
+       
 
     }
 }

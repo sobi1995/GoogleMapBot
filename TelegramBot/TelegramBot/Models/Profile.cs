@@ -16,5 +16,6 @@ namespace GoogleMapBot.Models
         public int? Age { get; set; }
         public string Name { get; set; }
         public string Discraption { get; set; }
+        public string UrlUserProfile { get; set; }
     }
 }

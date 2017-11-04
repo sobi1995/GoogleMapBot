@@ -11,6 +11,16 @@
     <script src="Scripts/jquery.signalR-2.0.3.min.js"></script>
     <script src="signalr/hubs"></script>
     <script src="Scripts/respond.js"></script>
+    <style>
+        .marker {
+            display: block;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+        }
+    </style>
+    
 </head>
 <body>
 
@@ -88,12 +98,23 @@
           let y = Details.Y.replace("/", ".");
           var infoWindow = new google.maps.InfoWindow();
           var myLatLng = { lat: parseFloat(x), lng: parseFloat(y) };
-         
+          var icon = {
+              url:"https://api.telegram.org/file/bot423178669:AAE-lOeN5Hp0yC57FY_GiG5_JZxtvJNDk4I"+"/"+ Details.UrlUserProfile,
+              scaledSize: new google.maps.Size(38 , 38), // scaled size
+              origin: new google.maps.Point(0, 0), // origin
+              anchor: new google.maps.Point(0,0), // anchor
+          
+             
+             
+          };
           data = marker;
         marker = new google.maps.Marker({
           position: myLatLng,
           map: map,
-          title: Details.UserName
+          title: Details.UserName,
+          icon: icon,
+          animation: google.maps.Animation.BOUNCE,
+           
         });
         
 

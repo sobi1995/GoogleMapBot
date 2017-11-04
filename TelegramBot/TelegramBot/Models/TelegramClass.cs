@@ -35,6 +35,8 @@ namespace GoogleMapBot.Models
                    .ReverseMap();
             });
             var a = Mapper.Map<Profile>(UserLocation);
+           a.UrlUserProfile =GetPhotoProile(id);
+            
             a.X = x;
             a.Y = y;
             h.Send(a);
@@ -119,7 +121,7 @@ namespace GoogleMapBot.Models
                 string Profile = "FirstName : " + Me.FirstName + "\n lastName : " + Me.lastName
                     + "\n UserName : " + Me.UserName + "\n Name : " + Me.Name
                    + Me.Age + "\n Discraption : " + Me.Discraption;
-                SedPhotoProile(message.Chat.Id, "Sdfsd");
+              
                 List<string> NullFild = _dbService.ProfileNull(message.Chat.Id);
                 if (NullFild.Count <= 0)
                 {
@@ -177,11 +179,11 @@ namespace GoogleMapBot.Models
             }
         }
 
-        async void SedPhotoProile(long id, string Txt)
+       string GetPhotoProile(long id)
         {
-            Telegram.Bot.Types.UserProfilePhotos photo = Bot.GetUserProfilePhotosAsync(Int32.Parse(id.ToString())).Result;
-           
+          var photo = Bot.GetUserProfilePhotosAsync(Int32.Parse(id.ToString())).Result;
 
+            return  photo.Photos[0][0].FilePath;
              //await Bot.SendPhoto(id,photo.Photos,"sdfsdf");
         }
 
