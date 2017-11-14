@@ -1,0 +1,38 @@
+﻿ 
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  
+ 
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div> 
+
+        <h1>The First App</h1>
+
+        <h1>Getting server updates</h1>
+        <div id="result"></div>
+    </div>
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    
+    
+            var source = new EventSource("Test");
+
+            source.onmessage = function (event) {
+
+          
+                document.getElementById("result").innerHTML += event.data + "<br>";
+            };
+        
+
+
+   
+   
+</script>
