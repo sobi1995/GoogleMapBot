@@ -74,7 +74,7 @@ namespace CodeBlock.Bot.Engine.Controllers
             if (text.TrimAllSpase() == "🔵  من  انلاین هستم".TrimAllSpase())
             {
                 
-
+             
                    Member UserStart = new Member(update.Message.From.Id,update.Message.From.FirstName, update.Message.From.LastName, update.Message.From.Username);
                 _dbService.AddWhenStart(UserStart);
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
