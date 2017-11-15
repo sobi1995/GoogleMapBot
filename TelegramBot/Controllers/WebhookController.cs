@@ -16,21 +16,21 @@ using TelegramBot.Models;
  
 namespace CodeBlock.Bot.Engine.Controllers
 {
-    public class webhookController : ApiController
+    public class WebhookController : ApiController
     {
         dbService _dbService;
      
 
         private Api bot;
         private static ReplyKeyboardMarkup main_menu_key;
-        string botToken = "Bot Token";
+      
         private static string image_savePath = @"C://robot_files//1.jpg";
         int Instructions = 0;
 
 
 
 
-        public webhookController()
+        public WebhookController()
         {
             bot = new Api("423178669:AAE-lOeN5Hp0yC57FY_GiG5_JZxtvJNDk4I");
             _dbService = new dbService();
@@ -70,7 +70,7 @@ namespace CodeBlock.Bot.Engine.Controllers
      
            if (TrimMsg == "/start")
             {
-               System.Web.HttpContext.Current.Session["City"] = "fgf";
+             //  System.Web.HttpContext.Current.Session["City"] = "fgf";
                 string[] BtnImIbline = { "🔵  من  انلاین هستم" };
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(BtnImIbline, 2, 2, null));
                 dynamicKeyBord.ResizeKeyboard = true;
@@ -134,6 +134,10 @@ namespace CodeBlock.Bot.Engine.Controllers
 
 
 
+            }
+            else if (update.Message.Location!=null)
+            {
+                _dbService.UpdateLocation(new TelegramBot.Models.Location() { X = update.Message.Location.Latitude, Y = update.Message.Location.Longitude });
             }
 
       

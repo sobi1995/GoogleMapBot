@@ -7,7 +7,7 @@ namespace TelegramBot.Models
 {
     public class Location
     {
-        public string X { get; set; }
-        public string Y { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
     }
 }
