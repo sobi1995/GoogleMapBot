@@ -48,6 +48,11 @@ namespace CodeBlock.Bot.Engine.Controllers
  
         public async Task<IHttpActionResult> Post(Update update)
         {
+
+           
+
+
+
             var chatType = update.Message.Chat.Type;
 
             //ربات به آپدیت های گروههای چت پاسخی ندهد
@@ -65,7 +70,7 @@ namespace CodeBlock.Bot.Engine.Controllers
      
            if (TrimMsg == "/start")
             {
-
+               System.Web.HttpContext.Current.Session["City"] = "fgf";
                 string[] BtnImIbline = { "🔵  من  انلاین هستم" };
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(BtnImIbline, 2, 2, null));
                 dynamicKeyBord.ResizeKeyboard = true;
@@ -74,7 +79,7 @@ namespace CodeBlock.Bot.Engine.Controllers
             if (text.TrimAllSpase() == "🔵  من  انلاین هستم".TrimAllSpase())
             {
                 
-             //سیبیبسیب
+       
                    Member UserStart = new Member(update.Message.From.Id,update.Message.From.FirstName, update.Message.From.LastName, update.Message.From.Username);
                 _dbService.AddWhenStart(UserStart);
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
@@ -91,6 +96,7 @@ namespace CodeBlock.Bot.Engine.Controllers
                 await bot.SendTextMessage(chatId: update.Message.Chat.Id, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
 
             }
+
             else if (Instructions == 2)
             {
                 
@@ -103,10 +109,10 @@ namespace CodeBlock.Bot.Engine.Controllers
             else if (TrimMsg.TrimAllSpase() == "👥ساخت چت روم👥".TrimAllSpase())
             {
                 Instructions = 1;
-                string[] CreateChatRoom = { "بازگشت  🔙" };
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(CreateChatRoom, 2, 2, null));
+                string[] CreateChatRoom = { "ارسال موقعیت % 📍","بازگشت  🔙"};
+                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(CreateChatRoom, 1, 2, null));
                 dynamicKeyBord.ResizeKeyboard = true;
-                
+               
                 await bot.SendTextMessage(chatId: update.Message.Chat.Id, text: "لطفا اسم  چت روم خود را وارد کنید", replyMarkup: dynamicKeyBord);
             }
             else if (TrimMsg.TrimAllSpase() == "📋    لیست روم ها    📋".TrimAllSpase())
@@ -130,9 +136,9 @@ namespace CodeBlock.Bot.Engine.Controllers
 
             }
 
+      
 
-
-            return Ok();
+                return Ok();
         }
 
 

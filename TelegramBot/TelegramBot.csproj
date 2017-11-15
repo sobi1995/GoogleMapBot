@@ -199,6 +199,7 @@
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\dbService.cs" />
     <Compile Include="Models\KeyBord.cs" />
+    <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Member.cs" />
     <Compile Include="Models\ExtMethode.cs" />
@@ -232,9 +233,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>57668</DevelopmentServerPort>
+          <DevelopmentServerPort>51111</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:57668/</IISUrl>
+          <IISUrl>http://localhost:51111/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

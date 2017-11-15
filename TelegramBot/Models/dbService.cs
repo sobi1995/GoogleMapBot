@@ -78,5 +78,11 @@ namespace GoogleMapBot.Models
 
             return _db.Member.Where(x => x.UserId == id && x.ChatRoomId != null).Select(x => x.ChatRoomId).FirstOrDefault();
         }
+        public int UpdateLocation(Location Location) {
+
+
+
+            return 0;
+        }
     }
 }

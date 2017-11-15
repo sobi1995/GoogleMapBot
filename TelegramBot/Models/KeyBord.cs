@@ -33,13 +33,12 @@ namespace GoogleMapBot.Models
                     
                     {
                         Text = stringArray[IndexstringArray],
-
-
+                       
                     };
-
-                    if (stringArray[IndexstringArray].Contains("@"))
+          
+                        if (stringArray[IndexstringArray].Contains("@"))
                     {
-
+                       
                         keyboardButtons[i].Text = stringArray[IndexstringArray].Replace("@", string.Empty);
                         keyboardButtons[i].RequestContact = true;
                     }
@@ -52,10 +51,10 @@ namespace GoogleMapBot.Models
                     IndexstringArray++;
                 }
                 keyboardInline[j] = keyboardButtons;
-
-            }
            
-            if (extrabtn != null)
+            }
+      
+                if (extrabtn != null)
                 keyboardInline[row] = extrabtn;
             return keyboardInline;
         }
@@ -100,7 +99,7 @@ namespace GoogleMapBot.Models
         }
 
 
-        public static List<string> Menu =new   List<string>() { "👥   ساخت چت روم   👥 ", "📋    لیست روم ها    📋", "ورد به سایت", "رهنمایی", "درباره ما" };
+        public static List<string> Menu =new   List<string>() { "👥   ساخت چت روم   👥 ", "عضویت در نزدیک ترین روم  📡", "📋    لیست روم ها    📋", "ورد به سایت", "رهنمایی", "درباره ما" };
         public static List<string> Profile =new     List<string>() { "نام","سن","Bio" };
     }
 }//

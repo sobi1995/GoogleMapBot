@@ -19,7 +19,7 @@ namespace GoogleMapBot.Models
         public string lastName { get; set; }
         public string UserName { get; set; }
         public byte Role { get; set; }
-
+        public Location Location { get; set; }
         public virtual ChatRoom ChatRoom { get; set; }
         public int? ChatRoomId { get; set; }
 
