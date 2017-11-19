@@ -23,11 +23,22 @@ namespace TelegramBot
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
            Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Migrations.Configuration>());
-           
-            Telegram.Bot.Api bot = new Telegram.Bot.Api("423178669:AAE-lOeN5Hp0yC57FY_GiG5_JZxtvJNDk4I");
-            //bot.SetWebhook("https://hozhan.ir/api/Webhook").Wait();
+            try
+            {
+                Telegram.Bot.Api bot = new Telegram.Bot.Api("438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A");
+                bot.SetWebhook("https://5be5351e.ngrok.io/api/Webhook").Wait();
+
+            }
+            
+          
+
+             catch
+            {
+                HttpRuntime.UnloadAppDomain();
+
+            }
 
         }
-        
+
     }
 }

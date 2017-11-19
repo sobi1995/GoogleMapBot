@@ -32,7 +32,7 @@ namespace CodeBlock.Bot.Engine.Controllers
 
         public WebhookController()
         {
-            bot = new Api("423178669:AAE-lOeN5Hp0yC57FY_GiG5_JZxtvJNDk4I");
+            bot = new Api("438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A");
             _dbService = new dbService();
             //تعریف کیبورد
             main_menu_key = new ReplyKeyboardMarkup
@@ -49,100 +49,35 @@ namespace CodeBlock.Bot.Engine.Controllers
         public async Task<IHttpActionResult> Post(Update update)
         {
 
-           
-
-
-
-            var chatType = update.Message.Chat.Type;
-
-            //ربات به آپدیت های گروههای چت پاسخی ندهد
-            if (chatType != ChatType.Private)
+         
+            UserDetails user = new UserDetails()
             {
-                return Ok();
-            }
-            var text = update.Message.Text;
-
-
-
-            string TrimMsg = text;
-             
-    
-     
-           if (TrimMsg == "/start")
+                FirstName = update.Message.From.FirstName,
+                LastName = update.Message.From.LastName,
+                UserId = update.Message.From.Id,
+                Username = update.Message.From.Username
+            };
+          
+ 
+            try
             {
-             //  System.Web.HttpContext.Current.Session["City"] = "fgf";
-                string[] BtnImIbline = { "🔵  من  انلاین هستم" };
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(BtnImIbline, 2, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true;
-                await bot.SendTextMessage(chatId: update.Message.Chat.Id, text: "متن راهنمای ربات", replyMarkup: dynamicKeyBord);
-            }
-            if (text.TrimAllSpase() == "🔵  من  انلاین هستم".TrimAllSpase())
-            {
-                
-       
-                   Member UserStart = new Member(update.Message.From.Id,update.Message.From.FirstName, update.Message.From.LastName, update.Message.From.Username);
-                _dbService.AddWhenStart(UserStart);
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true;
-             
-                await bot.SendTextMessage(chatId: update.Message.Chat.Id, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
-            }
+                System.Web.HttpContext.Current.Session["LogID"] = 10;
+                if (update.Message.Type == MessageType.TextMessage)
+                    TextMessage(update.Message.Text, user);
+                else if (update.Message.Type == MessageType.LocationMessage)
 
-            else if (TrimMsg.TrimAllSpase() == "بازگشت  🔙".TrimAllSpase())
-            {
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true;
-               
-                await bot.SendTextMessage(chatId: update.Message.Chat.Id, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
-
-            }
-
-            else if (Instructions == 2)
-            {
-                
-                string[] buttonChatRooms = { "🔴خروج" };
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(buttonChatRooms.ToArray(), 2, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true;
-                await bot.SendTextMessage(chatId: update.Message.Chat.Id, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
-                
-            }
-            else if (TrimMsg.TrimAllSpase() == "👥ساخت چت روم👥".TrimAllSpase())
-            {
-                Instructions = 1;
-                string[] CreateChatRoom = { "ارسال موقعیت % 📍","بازگشت  🔙"};
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(CreateChatRoom, 1, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true;
-               
-                await bot.SendTextMessage(chatId: update.Message.Chat.Id, text: "لطفا اسم  چت روم خود را وارد کنید", replyMarkup: dynamicKeyBord);
-            }
-            else if (TrimMsg.TrimAllSpase() == "📋    لیست روم ها    📋".TrimAllSpase())
-            {
-
-                var Rooms = _dbService.GetAllRoom();
-                var dynamicKeyBord = new InlineKeyboardMarkup(KeyBord.GetInlineKeyboard(Rooms.Select(x => x.Name).ToArray(), Rooms.Select(x => x.id.ToString()).ToArray(), 1, 2, null));
-                //
-                
-                await bot.SendTextMessage(chatId: update.Message.Chat.Id, text: "👇🏻👇🏻👇🏻👇🏻👇🏻👫    لیســـــــــت  رومـــــــــــ ها    👫👇🏻👇🏻👇🏻👇🏻👇🏻👫", replyMarkup: dynamicKeyBord);
-            }
-            else if (Instructions == 1)
-            {
-                _dbService.CreateChatRooms(TrimMsg);
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true;
-               
-                await bot.SendTextMessage(chatId: update.Message.Chat.Id, text: "ثبت شد", replyMarkup: dynamicKeyBord);
-
+                    ;
 
 
             }
-            else if (update.Message.Location!=null)
+            catch (Exception ex)
             {
-                _dbService.UpdateLocation(new TelegramBot.Models.Location() { X = update.Message.Location.Latitude, Y = update.Message.Location.Longitude });
+                var b = update;
+                var a = ex;
+          
             }
-
-      
-
-                return Ok();
+            return Ok();
+          
         }
 
 
@@ -154,5 +89,86 @@ namespace CodeBlock.Bot.Engine.Controllers
         {
             return "Yes Its Work";
         }
+
+        public async void TextMessage(string text,UserDetails user) {
+
+
+
+            if (text == "/start")
+            {
+                Member UserStart = new Member(user.UserId, user.FirstName, user.LastName, user.Username);
+                _dbService.AddWhenStart(UserStart);
+                string[] BtnImIbline = { "🔵  من  انلاین هستم" };
+                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(BtnImIbline, 2, 2, null));
+                dynamicKeyBord.ResizeKeyboard = true;
+                await bot.SendTextMessage(user.UserId, text: "متن راهنمای ربات", replyMarkup: dynamicKeyBord);
+            }
+            if (text.TrimAllSpase() == "🔵  من  انلاین هستم".TrimAllSpase())
+            {
+
+
+
+                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
+                dynamicKeyBord.ResizeKeyboard = true;
+
+                await bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
+            }
+
+            else if (text.TrimAllSpase() == "بازگشت  🔙".TrimAllSpase())
+            {
+                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
+                dynamicKeyBord.ResizeKeyboard = true;
+
+                await bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
+
+            }
+
+            else if (Instructions == 2)
+            {
+
+                string[] buttonChatRooms = { "🔴خروج" };
+                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(buttonChatRooms.ToArray(), 2, 2, null));
+                dynamicKeyBord.ResizeKeyboard = true;
+                await bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
+
+            }
+            else if (text.TrimAllSpase() == "👥ساخت چت روم👥".TrimAllSpase())
+            {
+                Instructions = 1;
+                string[] CreateChatRoom = { "ارسال موقعیت % 📍", "بازگشت  🔙" };
+                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(CreateChatRoom, 1, 2, null));
+                dynamicKeyBord.ResizeKeyboard = true;
+
+                await bot.SendTextMessage(chatId: user.UserId, text: "لطفا اسم  چت روم خود را وارد کنید", replyMarkup: dynamicKeyBord);
+            }
+            else if (text.TrimAllSpase() == "📋    لیست روم ها    📋".TrimAllSpase())
+            {
+
+                var Rooms = _dbService.GetAllRoom();
+                var dynamicKeyBord = new InlineKeyboardMarkup(KeyBord.GetInlineKeyboard(Rooms.Select(x => x.Name).ToArray(), Rooms.Select(x => x.id.ToString()).ToArray(), 1, 2, null));
+                //
+
+                await bot.SendTextMessage(chatId: user.UserId, text: "👇🏻👇🏻👇🏻👇🏻👇🏻👫    لیســـــــــت  رومـــــــــــ ها    👫👇🏻👇🏻👇🏻👇🏻👇🏻👫", replyMarkup: dynamicKeyBord);
+            }
+            else if (Instructions == 1)
+            {
+                _dbService.CreateChatRooms(text);
+                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
+                dynamicKeyBord.ResizeKeyboard = true;
+
+                await bot.SendTextMessage(chatId: user.UserId, text: "ثبت شد", replyMarkup: dynamicKeyBord);
+
+
+
+            }
+
+
+        }
+        public async void LocationMessage(string text, UserDetails user) {
+
+
+
+        }
+
     }
 }

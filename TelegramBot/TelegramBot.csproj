@@ -168,6 +168,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\baran.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Entity\GooogleMapBot.js" />
     <Content Include="Scripts\Entity\Telegram.js" />
@@ -197,6 +198,7 @@
     <Compile Include="Models\ChatRoom.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\dbService.cs" />
+    <Compile Include="Models\UserDetails.cs" />
     <Compile Include="Models\KeyBord.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Message.cs" />

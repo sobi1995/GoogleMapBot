@@ -14,23 +14,33 @@ namespace GoogleMapBot.Models
             _db = new Context();
         }
         public  int AddWhenStart(Member Ueser) {
-
-
-            if (!_db.Member.Where(x => x.UserId.Equals(Ueser.UserId)).Any())
+            try
             {
-                Member StrtUser = new Member() {
-                    UserId = Ueser.UserId,
-                    FirstName = Ueser.FirstName,
-                    UserName = Ueser.UserName,
-                    lastName = Ueser.lastName,
-                    Role = 0,
-                    
+
+            
+
+            if (!_db.Member.Any(x => x.UserId==Ueser.UserId))
+            {
+                    Member StrtUser = new Member() {
+                        UserId = Ueser.UserId,
+                        FirstName = Ueser.FirstName,
+                        Username = Ueser.Username,
+                        LastName = Ueser.LastName,
+                        Role = 0,
+                        Location = new Location() { X = 0, Y = 0 }
+                      
                     
                 };
                 _db.Member.Add(StrtUser);
                 _db.SaveChanges();
                 return 1;
 
+            }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
             return 0;
         }
