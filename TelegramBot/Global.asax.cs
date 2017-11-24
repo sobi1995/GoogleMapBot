@@ -11,6 +11,7 @@ using System.Data.Entity;
 using GoogleMapBot.Models;
 
 using System.Threading.Tasks;
+using TelegramBot.Models;
 
 namespace TelegramBot
 {
@@ -26,8 +27,10 @@ namespace TelegramBot
             try
             {
                 Telegram.Bot.Api bot = new Telegram.Bot.Api("438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A");
-                bot.SetWebhook("https://5be5351e.ngrok.io/api/Webhook").Wait();
-
+                bot.SetWebhook("https://73c3bcda.ngrok.io/api/Webhook").Wait();
+                //UserConfog d = new UserConfog();
+                UserConfog d = Singleton.Instance;
+                d.StartTemeUser();
             }
             
           
@@ -39,6 +42,19 @@ namespace TelegramBot
             }
 
         }
+        //public override void Init()
+        //{
+        //    this.PostAuthenticateRequest += MvcApplication_PostAuthenticateRequest;
+        //    base.Init();
+        //}
+
+        //void MvcApplication_PostAuthenticateRequest(object sender, EventArgs e)
+        //{
+        //    System.Web.HttpContext.Current.SetSessionStateBehavior(
+        //        SessionStateBehavior.Required);
+        //}
+
+     
 
     }
 }

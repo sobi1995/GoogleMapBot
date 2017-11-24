@@ -13,13 +13,14 @@ using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Types.Enums;
 using GoogleMapBot.Models;
 using TelegramBot.Models;
- 
+using System.Diagnostics;
+
 namespace CodeBlock.Bot.Engine.Controllers
 {
     public class WebhookController : ApiController
     {
         dbService _dbService;
-     
+        UserConfog userconfog = Singleton.Instance;// new UserConfog();
 
         private Api bot;
         private static ReplyKeyboardMarkup main_menu_key;
@@ -43,13 +44,12 @@ namespace CodeBlock.Bot.Engine.Controllers
             };
         }
 
-       
 
- 
-        public async Task<IHttpActionResult> Post(Update update)
+        
+
+        public void Post(Update update)
         {
-
-         
+          
             UserDetails user = new UserDetails()
             {
                 FirstName = update.Message.From.FirstName,
@@ -61,22 +61,22 @@ namespace CodeBlock.Bot.Engine.Controllers
  
             try
             {
-                System.Web.HttpContext.Current.Session["LogID"] = 10;
+
                 if (update.Message.Type == MessageType.TextMessage)
                     TextMessage(update.Message.Text, user);
                 else if (update.Message.Type == MessageType.LocationMessage)
+                    LocationMessage(new TelegramBot.Models.Location() { X = update.Message.Location.Latitude, Y = update.Message.Location.Longitude },user);
 
-                    ;
-
+                 
 
             }
             catch (Exception ex)
             {
-                var b = update;
-                var a = ex;
+                ;
+              
           
             }
-            return Ok();
+            //return Ok();
           
         }
 
@@ -90,7 +90,7 @@ namespace CodeBlock.Bot.Engine.Controllers
             return "Yes Its Work";
         }
 
-        public async void TextMessage(string text,UserDetails user) {
+        public  void TextMessage(string text,UserDetails user) {
 
 
 
@@ -99,19 +99,19 @@ namespace CodeBlock.Bot.Engine.Controllers
                 Member UserStart = new Member(user.UserId, user.FirstName, user.LastName, user.Username);
                 _dbService.AddWhenStart(UserStart);
                 string[] BtnImIbline = { "🔵  من  انلاین هستم" };
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(BtnImIbline, 2, 2, null));
+              
+                   var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(BtnImIbline, 2, 2, null));
                 dynamicKeyBord.ResizeKeyboard = true;
-                await bot.SendTextMessage(user.UserId, text: "متن راهنمای ربات", replyMarkup: dynamicKeyBord);
+                 bot.SendTextMessage(user.UserId, text: "متن راهنمای ربات", replyMarkup: dynamicKeyBord);
             }
             if (text.TrimAllSpase() == "🔵  من  انلاین هستم".TrimAllSpase())
             {
-
-
+                userconfog.Adduser(user.UserId);
 
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
                 dynamicKeyBord.ResizeKeyboard = true;
 
-                await bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
+                 bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
             }
 
             else if (text.TrimAllSpase() == "بازگشت  🔙".TrimAllSpase())
@@ -119,7 +119,7 @@ namespace CodeBlock.Bot.Engine.Controllers
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
                 dynamicKeyBord.ResizeKeyboard = true;
 
-                await bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
+                 bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
 
             }
 
@@ -129,7 +129,7 @@ namespace CodeBlock.Bot.Engine.Controllers
                 string[] buttonChatRooms = { "🔴خروج" };
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(buttonChatRooms.ToArray(), 2, 2, null));
                 dynamicKeyBord.ResizeKeyboard = true;
-                await bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
+                 bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
 
             }
             else if (text.TrimAllSpase() == "👥ساخت چت روم👥".TrimAllSpase())
@@ -139,7 +139,7 @@ namespace CodeBlock.Bot.Engine.Controllers
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(CreateChatRoom, 1, 2, null));
                 dynamicKeyBord.ResizeKeyboard = true;
 
-                await bot.SendTextMessage(chatId: user.UserId, text: "لطفا اسم  چت روم خود را وارد کنید", replyMarkup: dynamicKeyBord);
+                 bot.SendTextMessage(chatId: user.UserId, text: "لطفا اسم  چت روم خود را وارد کنید", replyMarkup: dynamicKeyBord);
             }
             else if (text.TrimAllSpase() == "📋    لیست روم ها    📋".TrimAllSpase())
             {
@@ -148,7 +148,7 @@ namespace CodeBlock.Bot.Engine.Controllers
                 var dynamicKeyBord = new InlineKeyboardMarkup(KeyBord.GetInlineKeyboard(Rooms.Select(x => x.Name).ToArray(), Rooms.Select(x => x.id.ToString()).ToArray(), 1, 2, null));
                 //
 
-                await bot.SendTextMessage(chatId: user.UserId, text: "👇🏻👇🏻👇🏻👇🏻👇🏻👫    لیســـــــــت  رومـــــــــــ ها    👫👇🏻👇🏻👇🏻👇🏻👇🏻👫", replyMarkup: dynamicKeyBord);
+                 bot.SendTextMessage(chatId: user.UserId, text: "👇🏻👇🏻👇🏻👇🏻👇🏻👫    لیســـــــــت  رومـــــــــــ ها    👫👇🏻👇🏻👇🏻👇🏻👇🏻👫", replyMarkup: dynamicKeyBord);
             }
             else if (Instructions == 1)
             {
@@ -156,16 +156,26 @@ namespace CodeBlock.Bot.Engine.Controllers
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
                 dynamicKeyBord.ResizeKeyboard = true;
 
-                await bot.SendTextMessage(chatId: user.UserId, text: "ثبت شد", replyMarkup: dynamicKeyBord);
+                 bot.SendTextMessage(chatId: user.UserId, text: "ثبت شد", replyMarkup: dynamicKeyBord);
 
 
 
             }
+            var a = userconfog
+;
+        }
+        public  void LocationMessage(TelegramBot.Models.Location Location, UserDetails user) {
 
+            _dbService.UpdateLocation(Location, user.UserId);
 
         }
-        public async void LocationMessage(string text, UserDetails user) {
+        public  void TimeOut(int UserId)
+        {
+            string[] BtnImIbline = { "🔵  من  انلاین هستم" };
 
+            var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(BtnImIbline, 2, 2, null));
+            dynamicKeyBord.ResizeKeyboard = true;
+             bot.SendTextMessage(UserId, text: "متن راهنمای ربات", replyMarkup: dynamicKeyBord);
 
 
         }
