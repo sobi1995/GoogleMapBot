@@ -1,10 +1,6 @@
 namespace TelegramBot.Migrations
 {
-    using GoogleMapBot.Models;
-    using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
     public class Configuration : DbMigrationsConfiguration<GoogleMapBot.Models.Context>
     {
@@ -22,7 +18,7 @@ namespace TelegramBot.Migrations
             //db.SaveChanges();
             //  This method will be called after migrating to the latest version.
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
+            //  You can use the DbSet<T>.AddOrUpdate() helper extension method
             //  to avoid creating duplicate seed data.
         }
     }

@@ -3,16 +3,14 @@
    * Supported by sc AmvTek srl
    * :email: devel@amvtek.com
  */
-;(function (global) {
-
-    if (global.EventSource && !global._eventSourceImportPrefix){
+; (function (global) {
+    if (global.EventSource && !global._eventSourceImportPrefix) {
         return;
     }
 
-    var evsImportName = (global._eventSourceImportPrefix||'')+"EventSource";
+    var evsImportName = (global._eventSourceImportPrefix || '') + "EventSource";
 
     var EventSource = function (url, options) {
-
         if (!url || typeof url != 'string') {
             throw new SyntaxError('Not enough arguments');
         }
@@ -20,11 +18,10 @@
         this.URL = url;
         this.setOptions(options);
         var evs = this;
-        setTimeout(function(){evs.poll()}, 0);
+        setTimeout(function () { evs.poll() }, 0);
     };
 
     EventSource.prototype = {
-
         CONNECTING: 0,
 
         OPEN: 1,
@@ -32,45 +29,41 @@
         CLOSED: 2,
 
         defaultOptions: {
-
             loggingEnabled: false,
 
             loggingPrefix: "eventsource",
 
             interval: 500, // milliseconds
 
-            bufferSizeLimit: 256*1024, // bytes
+            bufferSizeLimit: 256 * 1024, // bytes
 
             silentTimeout: 300000, // milliseconds
 
-            getArgs:{
-                'evs_buffer_size_limit': 256*1024
+            getArgs: {
+                'evs_buffer_size_limit': 256 * 1024
             },
 
-            xhrHeaders:{
+            xhrHeaders: {
                 'Accept': 'text/event-stream',
                 'Cache-Control': 'no-cache',
                 'X-Requested-With': 'XMLHttpRequest'
             }
         },
 
-        setOptions: function(options){
-
+        setOptions: function (options) {
             var defaults = this.defaultOptions;
             var option;
 
             // set all default options...
-            for (option in defaults){
-
-                if ( defaults.hasOwnProperty(option) ){
+            for (option in defaults) {
+                if (defaults.hasOwnProperty(option)) {
                     this[option] = defaults[option];
                 }
             }
 
             // override with what is in options
-            for (option in options){
-
-                if (option in defaults && options.hasOwnProperty(option)){
+            for (option in options) {
+                if (option in defaults && options.hasOwnProperty(option)) {
                     this[option] = options[option];
                 }
             }
@@ -78,29 +71,23 @@
             // if getArgs option is enabled
             // ensure evs_buffer_size_limit corresponds to bufferSizeLimit
             if (this.getArgs && this.bufferSizeLimit) {
-
                 this.getArgs['evs_buffer_size_limit'] = this.bufferSizeLimit;
             }
 
             // if console is not available, force loggingEnabled to false
             if (typeof console === "undefined" || typeof console.log === "undefined") {
-
                 this.loggingEnabled = false;
             }
         },
 
-        log: function(message) {
-
+        log: function (message) {
             if (this.loggingEnabled) {
-
-                console.log("[" + this.loggingPrefix +"]:" + message)
+                console.log("[" + this.loggingPrefix + "]:" + message)
             }
         },
 
-        poll: function() {
-
+        poll: function () {
             try {
-
                 if (this.readyState == this.CLOSED) {
                     return;
                 }
@@ -111,10 +98,8 @@
                 this.cache = '';
                 this._xhr = new this.XHR(this);
                 this.resetNoActivityTimer();
-
             }
             catch (e) {
-
                 // in an attempt to silence the errors
                 this.log('There were errors inside the pool try-catch');
                 this.dispatchEvent('error', { type: 'error', data: e.message });
@@ -122,7 +107,6 @@
         },
 
         pollAgain: function (interval) {
-
             // schedule poll to be called after interval milliseconds
             var evs = this;
             evs.readyState = evs.CONNECTING;
@@ -130,57 +114,51 @@
                 type: 'error',
                 data: "Reconnecting "
             });
-            this._pollTimer = setTimeout(function(){evs.poll()}, interval||0);
+            this._pollTimer = setTimeout(function () { evs.poll() }, interval || 0);
         },
 
-
-        cleanup: function() {
-
+        cleanup: function () {
             this.log('evs cleaning up')
 
-            if (this._pollTimer){
+            if (this._pollTimer) {
                 clearInterval(this._pollTimer);
                 this._pollTimer = null;
             }
 
-            if (this._noActivityTimer){
+            if (this._noActivityTimer) {
                 clearInterval(this._noActivityTimer);
                 this._noActivityTimer = null;
             }
 
-            if (this._xhr){
+            if (this._xhr) {
                 this._xhr.abort();
                 this._xhr = null;
             }
         },
 
-        resetNoActivityTimer: function(){
-
-            if (this.silentTimeout){
-
-                if (this._noActivityTimer){
+        resetNoActivityTimer: function () {
+            if (this.silentTimeout) {
+                if (this._noActivityTimer) {
                     clearInterval(this._noActivityTimer);
                 }
                 var evs = this;
                 this._noActivityTimer = setTimeout(
-                        function(){ evs.log('Timeout! silentTImeout:'+evs.silentTimeout); evs.pollAgain(); },
+                        function () { evs.log('Timeout! silentTImeout:' + evs.silentTimeout); evs.pollAgain(); },
                         this.silentTimeout
                         );
             }
         },
 
         close: function () {
-
             this.readyState = this.CLOSED;
-            this.log('Closing connection. readyState: '+this.readyState);
+            this.log('Closing connection. readyState: ' + this.readyState);
             this.cleanup();
         },
 
-        _onxhrdata: function() {
-
+        _onxhrdata: function () {
             var request = this._xhr;
 
-            if (request.isReady() && !request.hasError() ) {
+            if (request.isReady() && !request.hasError()) {
                 // reset the timer, as we have activity
                 this.resetNoActivityTimer();
 
@@ -197,17 +175,15 @@
                     this.pollAgain();
                 }
 
-                if (this.cursor == 0 && buffer.length > 0){
-
+                if (this.cursor == 0 && buffer.length > 0) {
                     // skip byte order mark \uFEFF character if it starts the stream
-                    if (buffer.substring(0,1) == '\uFEFF'){
+                    if (buffer.substring(0, 1) == '\uFEFF') {
                         this.cursor = 1;
                     }
                 }
 
                 var lastMessageIndex = this.lastMessageIndex(buffer);
-                if (lastMessageIndex[0] >= this.cursor){
-
+                if (lastMessageIndex[0] >= this.cursor) {
                     var newcursor = lastMessageIndex[1];
                     var toparse = buffer.substring(this.cursor, newcursor);
                     this.parseStream(toparse);
@@ -221,7 +197,6 @@
                 }
             }
             else if (this.readyState !== this.CLOSED) {
-
                 this.log('this.readyState !== this.CLOSED');
                 this.pollAgain(this.interval);
 
@@ -229,8 +204,7 @@
             }
         },
 
-        parseStream: function(chunk) {
-
+        parseStream: function (chunk) {
             // normalize line separators (\r\n,\r,\n) to \n
             // remove white spaces that may precede \n
             chunk = this.cache + this.normalizeToLF(chunk);
@@ -239,37 +213,30 @@
 
             var i, j, eventType, datas, line, retry;
 
-            for (i=0; i < (events.length - 1); i++) {
-
+            for (i = 0; i < (events.length - 1) ; i++) {
                 eventType = 'message';
                 datas = [];
                 parts = events[i].split('\n');
 
-                for (j=0; j < parts.length; j++) {
-
+                for (j = 0; j < parts.length; j++) {
                     line = this.trimWhiteSpace(parts[j]);
 
                     if (line.indexOf('event') == 0) {
-
                         eventType = line.replace(/event:?\s*/, '');
                     }
                     else if (line.indexOf('retry') == 0) {
-
                         retry = parseInt(line.replace(/retry:?\s*/, ''));
-                        if(!isNaN(retry)) {
+                        if (!isNaN(retry)) {
                             this.interval = retry;
                         }
                     }
                     else if (line.indexOf('data') == 0) {
-
                         datas.push(line.replace(/data:?\s*/, ''));
                     }
                     else if (line.indexOf('id:') == 0) {
-
                         this.lastEventId = line.replace(/id:?\s*/, '');
                     }
                     else if (line.indexOf('id') == 0) { // this resets the id
-
                         this.lastEventId = null;
                     }
                 }
@@ -288,7 +255,6 @@
             var handlers = this['_' + type + 'Handlers'];
 
             if (handlers) {
-
                 for (var i = 0; i < handlers.length; i++) {
                     handlers[i].call(this, event);
                 }
@@ -297,7 +263,6 @@
             if (this['on' + type]) {
                 this['on' + type].call(this, event);
             }
-
         },
 
         addEventListener: function (type, handler) {
@@ -346,24 +311,21 @@
         // those are attached to prototype to ease reuse and testing...
 
         urlWithParams: function (baseURL, params) {
-
             var encodedArgs = [];
 
-            if (params){
-
+            if (params) {
                 var key, urlarg;
                 var urlize = encodeURIComponent;
 
-                for (key in params){
+                for (key in params) {
                     if (params.hasOwnProperty(key)) {
-                        urlarg = urlize(key)+'='+urlize(params[key]);
+                        urlarg = urlize(key) + '=' + urlize(params[key]);
                         encodedArgs.push(urlarg);
                     }
                 }
             }
 
-            if (encodedArgs.length > 0){
-
+            if (encodedArgs.length > 0) {
                 if (baseURL.indexOf('?') == -1)
                     return baseURL + '?' + encodedArgs.join('&');
                 return baseURL + '&' + encodedArgs.join('&');
@@ -371,48 +333,43 @@
             return baseURL;
         },
 
-        lastMessageIndex: function(text) {
-
-            var ln2 =text.lastIndexOf('\n\n');
+        lastMessageIndex: function (text) {
+            var ln2 = text.lastIndexOf('\n\n');
             var lr2 = text.lastIndexOf('\r\r');
             var lrln2 = text.lastIndexOf('\r\n\r\n');
 
             if (lrln2 > Math.max(ln2, lr2)) {
-                return [lrln2, lrln2+4];
+                return [lrln2, lrln2 + 4];
             }
             return [Math.max(ln2, lr2), Math.max(ln2, lr2) + 2]
         },
 
-        trimWhiteSpace: function(str) {
+        trimWhiteSpace: function (str) {
             // to remove whitespaces left and right of string
 
             var reTrim = /^(\s|\u00A0)+|(\s|\u00A0)+$/g;
             return str.replace(reTrim, '');
         },
 
-        normalizeToLF: function(str) {
-
+        normalizeToLF: function (str) {
             // replace \r and \r\n with \n
             return str.replace(/\r\n|\r/g, '\n');
         }
-
     };
 
-    if (!isOldIE()){
-
+    if (!isOldIE()) {
         EventSource.isPolyfill = "XHR";
 
         // EventSource will send request using XMLHttpRequest
-        EventSource.prototype.XHR = function(evs) {
-
+        EventSource.prototype.XHR = function (evs) {
             request = new XMLHttpRequest();
             this._request = request;
             evs._xhr = this;
 
             // set handlers
-            request.onreadystatechange = function(){
+            request.onreadystatechange = function () {
                 if (request.readyState > 1 && evs.readyState != evs.CLOSED) {
-                    if (request.status == 200 || (request.status>=300 && request.status<400)){
+                    if (request.status == 200 || (request.status >= 300 && request.status < 400)) {
                         evs._onxhrdata();
                     }
                     else {
@@ -420,7 +377,7 @@
                         evs.readyState = evs.CLOSED;
                         evs.dispatchEvent('error', {
                             type: 'error',
-                            data: "The server responded with "+request.status
+                            data: "The server responded with " + request.status
                         });
                         evs.close();
                     }
@@ -434,7 +391,7 @@
 
             var headers = evs.xhrHeaders; // maybe null
             for (var header in headers) {
-                if (headers.hasOwnProperty(header)){
+                if (headers.hasOwnProperty(header)) {
                     request.setRequestHeader(header, headers[header]);
                 }
             }
@@ -446,50 +403,42 @@
         };
 
         EventSource.prototype.XHR.prototype = {
-
             useXDomainRequest: false,
 
             _request: null,
 
             _failed: false, // true if we have had errors...
 
-            isReady: function() {
-
-
+            isReady: function () {
                 return this._request.readyState >= 2;
             },
 
-            isDone: function() {
-
+            isDone: function () {
                 return (this._request.readyState == 4);
             },
 
-            hasError: function() {
-
+            hasError: function () {
                 return (this._failed || (this._request.status >= 400));
             },
 
-            getBuffer: function() {
-
+            getBuffer: function () {
                 var rv = '';
                 try {
                     rv = this._request.responseText || '';
                 }
-                catch (e){}
+                catch (e) { }
                 return rv;
             },
 
-            abort: function() {
-
-                if ( this._request ) {
+            abort: function () {
+                if (this._request) {
                     this._request.abort();
                 }
             }
         };
     }
     else {
-
-	EventSource.isPolyfill = "IE_8-9";
+        EventSource.isPolyfill = "IE_8-9";
 
         // patch EventSource defaultOptions
         var defaults = EventSource.prototype.defaultOptions;
@@ -497,23 +446,22 @@
         defaults.getArgs['evs_preamble'] = 2048 + 8;
 
         // EventSource will send request using Internet Explorer XDomainRequest
-        EventSource.prototype.XHR = function(evs) {
-
+        EventSource.prototype.XHR = function (evs) {
             request = new XDomainRequest();
             this._request = request;
 
             // set handlers
-            request.onprogress = function(){
+            request.onprogress = function () {
                 request._ready = true;
                 evs._onxhrdata();
             };
 
-            request.onload = function(){
+            request.onload = function () {
                 this._loaded = true;
                 evs._onxhrdata();
             };
 
-            request.onerror = function(){
+            request.onerror = function () {
                 this._failed = true;
                 evs.readyState = evs.CLOSED;
                 evs.dispatchEvent('error', {
@@ -522,7 +470,7 @@
                 });
             };
 
-            request.ontimeout = function(){
+            request.ontimeout = function () {
                 this._failed = true;
                 evs.readyState = evs.CLOSED;
                 evs.dispatchEvent('error', {
@@ -536,26 +484,24 @@
             // we add parameters to URL so that server can adapt the stream...
             var reqGetArgs = {};
             if (evs.getArgs) {
-
                 // copy evs.getArgs in reqGetArgs
                 var defaultArgs = evs.getArgs;
-                    for (var key in defaultArgs) {
-                        if (defaultArgs.hasOwnProperty(key)){
-                            reqGetArgs[key] = defaultArgs[key];
-                        }
+                for (var key in defaultArgs) {
+                    if (defaultArgs.hasOwnProperty(key)) {
+                        reqGetArgs[key] = defaultArgs[key];
                     }
-                if (evs.lastEventId){
+                }
+                if (evs.lastEventId) {
                     reqGetArgs['evs_last_event_id'] = evs.lastEventId;
                 }
             }
             // send the request
 
-            request.open('GET', evs.urlWithParams(evs.URL,reqGetArgs));
+            request.open('GET', evs.urlWithParams(evs.URL, reqGetArgs));
             request.send();
         };
 
         EventSource.prototype.XHR.prototype = {
-
             useXDomainRequest: true,
 
             _request: null,
@@ -566,34 +512,29 @@
 
             _failed: false, // true if when request is in error
 
-            isReady: function() {
-
+            isReady: function () {
                 return this._request._ready;
             },
 
-            isDone: function() {
-
+            isDone: function () {
                 return this._request._loaded;
             },
 
-            hasError: function() {
-
+            hasError: function () {
                 return this._request._failed;
             },
 
-            getBuffer: function() {
-
+            getBuffer: function () {
                 var rv = '';
                 try {
                     rv = this._request.responseText || '';
                 }
-                catch (e){}
+                catch (e) { }
                 return rv;
             },
 
-            abort: function() {
-
-                if ( this._request){
+            abort: function () {
+                if (this._request) {
                     this._request.abort();
                 }
             }
@@ -601,7 +542,6 @@
     }
 
     function MessageEvent(type, data, origin, lastEventId) {
-
         this.bubbles = false;
         this.cancelBubble = false;
         this.cancelable = false;
@@ -611,8 +551,7 @@
         this.type = type || 'message';
     }
 
-    function isOldIE () {
-
+    function isOldIE() {
         //return true if we are in IE8 or IE9
         return (window.XDomainRequest && (window.XMLHttpRequest && new XMLHttpRequest().responseType === undefined)) ? true : false;
     }

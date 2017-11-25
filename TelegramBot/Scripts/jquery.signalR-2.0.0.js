@@ -258,7 +258,6 @@
         } else if (requestedTransport === "auto" && signalR._.ieVersion <= 8) {
             // If we're doing an auto transport and we're IE8 then force longPolling, #1764
             return ["longPolling"];
-
         }
 
         return requestedTransport;
@@ -361,7 +360,7 @@
             link = window.document.createElement("a");
             link.href = url;
 
-            // When checking for cross domain we have to special case port 80 because the window.location will remove the 
+            // When checking for cross domain we have to special case port 80 because the window.location will remove the
             return link.protocol + addDefaultPort(link.protocol, link.host) !== against.protocol + addDefaultPort(against.protocol, against.host);
         },
 
@@ -957,7 +956,6 @@
     }
 
     $.connection = $.signalR = signalR;
-
 }(window.jQuery, window));
 /* jquery.signalR.transports.common.js */
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.md in the project root for license information.
@@ -1104,7 +1102,6 @@
                         }
                     }
                 ));
-
             }
             else {
                 deferral.reject(
@@ -1424,7 +1421,6 @@
             connections: {}
         }
     };
-
 }(window.jQuery, window));
 /* jquery.signalR.transports.webSockets.js */
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.md in the project root for license information.
@@ -1565,7 +1561,6 @@
             transportLogic.ajaxAbort(connection, async);
         }
     };
-
 }(window.jQuery, window));
 /* jquery.signalR.transports.serverSentEvents.js */
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.md in the project root for license information.
@@ -1744,7 +1739,6 @@
             transportLogic.ajaxAbort(connection, async);
         }
     };
-
 }(window.jQuery, window));
 /* jquery.signalR.transports.foreverFrame.js */
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.md in the project root for license information.
@@ -1760,7 +1754,7 @@
         changeState = $.signalR.changeState,
         transportLogic = signalR.transports._logic,
         // Used to prevent infinite loading icon spins in older versions of ie
-        // We build this object inside a closure so we don't pollute the rest of   
+        // We build this object inside a closure so we don't pollute the rest of
         // the foreverFrame transport with unnecessary functions/utilities.
         loadPreventer = (function () {
             var loadingFixIntervalId = null,
@@ -1786,7 +1780,7 @@
                         attachedTo++;
                     }
                 },
-                cancel: function () {                   
+                cancel: function () {
                     // Only clear the interval if there's only one more object that the loadPreventer is attachedTo
                     if (attachedTo === 1) {
                         window.clearInterval(loadingFixIntervalId);
@@ -1945,7 +1939,6 @@
             }
         }
     };
-
 }(window.jQuery, window));
 /* jquery.signalR.transports.longPolling.js */
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.md in the project root for license information.
@@ -2114,7 +2107,6 @@
                                 }
 
                                 if (!tryFailConnect()) {
-
                                     // Increment our reconnect errors, we assume all errors to be reconnect errors
                                     // In the case that it's our first error this will cause Reconnect to be fired
                                     // after 1 second due to reconnectErrors being = 1.
@@ -2140,12 +2132,11 @@
                         }
                     ));
 
-
                     // This will only ever pass after an error has occured via the poll ajax procedure.
                     if (reconnecting && raiseReconnect === true) {
                         // We wait to reconnect depending on how many times we've failed to reconnect.
                         // This is essentially a heuristic that will exponentially increase in wait time before
-                        // triggering reconnected.  This depends on the "error" handler of Poll to cancel this 
+                        // triggering reconnected.  This depends on the "error" handler of Poll to cancel this
                         // timeout if it triggers before the Reconnected event fires.
                         // The Math.min at the end is to ensure that the reconnect timeout does not overflow.
                         privateData.reconnectTimeoutId = window.setTimeout(function () { fireReconnected(instance); }, Math.min(1000 * (Math.pow(2, reconnectErrors) - 1), maxFireReconnectedTimeout));
@@ -2183,7 +2174,6 @@
             transportLogic.ajaxAbort(connection, async);
         }
     };
-
 }(window.jQuery, window));
 /* jquery.signalR.hubs.js */
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.md in the project root for license information.
@@ -2233,11 +2223,11 @@
         /// <param name="connection" type="hubConnection" />
         var callbacks = connection._.invocationCallbacks,
             callback;
-        
+
         if (hasMembers(callbacks)) {
             connection.log("Clearing hub invocation callbacks with error: " + error + ".");
         }
-        
+
         // Reset the callback cache now as we have a local var referencing it
         connection._.invocationCallbackId = 0;
         delete connection._.invocationCallbacks;
@@ -2245,7 +2235,7 @@
 
         // Loop over the callbacks and invoke them.
         // We do this using a local var reference and *after* we've cleared the cache
-        // so that if a fail callback itself tries to invoke another method we don't 
+        // so that if a fail callback itself tries to invoke another method we don't
         // end up with its callback in the list we're looping over.
         for (var callbackId in callbacks) {
             callback = callbacks[callbackId];
@@ -2379,7 +2369,7 @@
             if (!$.isEmptyObject(that.state)) {
                 data.S = that.state;
             }
-            
+
             connection.send(data);
 
             return d.promise();
@@ -2502,7 +2492,7 @@
                 // The original data is not a JSON payload so this is not a send error
                 return;
             }
-            
+
             callbackId = data.I;
             callback = connection._.invocationCallbacks[callbackId];
 
@@ -2536,7 +2526,7 @@
 
     hubConnection.fn._registerSubscribedHubs = function () {
         /// <summary>
-        ///     Sets the starting event to loop through the known hubs and register any new hubs 
+        ///     Sets the starting event to loop through the known hubs and register any new hubs
         ///     that have been added to the proxy.
         /// </summary>
         var connection = this;
@@ -2590,7 +2580,6 @@
     hubConnection.fn.init.prototype = hubConnection.fn;
 
     $.hubConnection = hubConnection;
-
 }(window.jQuery, window));
 /* jquery.signalR.version.js */
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.md in the project root for license information.

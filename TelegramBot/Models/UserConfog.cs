@@ -5,28 +5,30 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace TelegramBot.Models
 {
     public class UserConfog
     {
-        int a = 0;
-        Dictionary<int, int> userDic = new Dictionary<int, int>();
+        private int a = 0;
+        private Dictionary<int, int> userDic = new Dictionary<int, int>();
+
         public UserConfog()
         {
-            
         }
-        public void StartTemeUser() {
 
+        public void StartTemeUser()
+        {
             Task.Run(() => TimeStayUser());
         }
-        public void Adduser(int UserId) {
 
+        public void Adduser(int UserId)
+        {
             userDic.Add(UserId, 7);
-        
         }
-        public void  RemoveUser(int UserId) {
+
+        public void RemoveUser(int UserId)
+        {
             var b = userDic;
             userDic.Remove(UserId);
             var a = userDic;
@@ -36,46 +38,38 @@ namespace TelegramBot.Models
         {
             try
             {
-
-            while (true)
+                while (true)
                 {
-               
                     Thread.Sleep(5000);
                     Debug.WriteLine(userDic.Count.ToString());
                     if (userDic.Count <= 0)
                         continue;
-                foreach (var item in userDic.ToList())
+                    foreach (var item in userDic.ToList())
                     {
-                   
-                        userDic[item.Key] -=1;
+                        userDic[item.Key] -= 1;
                         var a = userDic[item.Key];
-                          int Key = userDic.Select(x=> x.Key).FirstOrDefault();
-                    if (userDic[item.Key] <= 0) {
-                        WebhookController d = new WebhookController();
-                        d.TimeOut(Key);
-                    
-                        RemoveUser(Key);
+                        int Key = userDic.Select(x => x.Key).FirstOrDefault();
+                        if (userDic[item.Key] <= 0)
+                        {
+                            WebhookController d = new WebhookController();
+                            d.TimeOut(Key);
+
+                            RemoveUser(Key);
+                        }
                     }
                 }
-
-            }
             }
             catch (Exception ex)
             {
-
                 throw;
             }
-
         }
+
         public void AddTime(int UserId)
         {
-
             userDic[UserId] = userDic[UserId]++;
-
-
         }
     }
-
 
     public sealed class Singleton
     {

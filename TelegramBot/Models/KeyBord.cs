@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using Telegram.Bot.Types;
 
 namespace GoogleMapBot.Models
 {
     static public class KeyBord
     {
-
-
         static public KeyboardButton[][] GetReplyKeyboardMarkup(string[] stringArray, int ColInRow,
            int btnType, KeyboardButton[] extrabtn)
         {
-
             int col = ColInRow;
             int row = stringArray.Length / col;
             row = (stringArray.Length % col) != 0 ? ++row : row;
@@ -30,15 +24,13 @@ namespace GoogleMapBot.Models
                 for (var i = 0; i < col; i++)
                 {
                     keyboardButtons[i] = new KeyboardButton()
-                    
+
                     {
                         Text = stringArray[IndexstringArray],
-                       
                     };
-          
-                        if (stringArray[IndexstringArray].Contains("@"))
+
+                    if (stringArray[IndexstringArray].Contains("@"))
                     {
-                       
                         keyboardButtons[i].Text = stringArray[IndexstringArray].Replace("@", string.Empty);
                         keyboardButtons[i].RequestContact = true;
                     }
@@ -51,13 +43,13 @@ namespace GoogleMapBot.Models
                     IndexstringArray++;
                 }
                 keyboardInline[j] = keyboardButtons;
-           
             }
-      
-                if (extrabtn != null)
+
+            if (extrabtn != null)
                 keyboardInline[row] = extrabtn;
             return keyboardInline;
         }
+
         static public InlineKeyboardButton[][] GetInlineKeyboard(string[] stringArray, string[] stringValue, int ColInRow,
             int btnType, InlineKeyboardButton[] extrabtn, string Link = "")
         {
@@ -77,14 +69,10 @@ namespace GoogleMapBot.Models
                 var keyboardButtons = new InlineKeyboardButton[col];
                 for (var i = 0; i < col; i++)
                 {
-
                     keyboardButtons[i] = new InlineKeyboardButton
                     {
                         Text = stringArray[IndexstringArray],
                         CallbackData = stringValue[IndexstringArray],
-                        
-                        
-
                     };
                     if (Link != "")
                         keyboardButtons[i].Url = Link;
@@ -98,8 +86,7 @@ namespace GoogleMapBot.Models
             return keyboardInline;
         }
 
-
-        public static List<string> Menu =new   List<string>() { "👥   ساخت چت روم   👥 ", "عضویت در نزدیک ترین روم  📡", "📋    لیست روم ها    📋", "ورد به سایت", "رهنمایی", "درباره ما" };
-        public static List<string> Profile =new     List<string>() { "نام","سن","Bio" };
+        public static List<string> Menu = new List<string>() { "👥   ساخت چت روم   👥 ", "عضویت در نزدیک ترین روم  📡", "📋    لیست روم ها    📋", "ورد به سایت", "رهنمایی", "درباره ما" };
+        public static List<string> Profile = new List<string>() { "نام", "سن", "Bio" };
     }
 }//

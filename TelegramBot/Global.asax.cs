@@ -1,29 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using GoogleMapBot.Models;
+using System;
+using System.Data.Entity;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web.Security;
-using System.Web.SessionState;
-using System.Web.Http;
-using System.Data.Entity;
-using GoogleMapBot.Models;
-
-using System.Threading.Tasks;
 using TelegramBot.Models;
 
 namespace TelegramBot
 {
     public class Global : HttpApplication
     {
-        void Application_Start(object sender, EventArgs e)
+        private void Application_Start(object sender, EventArgs e)
         {
             // Code that runs on application startup
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-           Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Migrations.Configuration>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Migrations.Configuration>());
             try
             {
                 Telegram.Bot.Api bot = new Telegram.Bot.Api("438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A");
@@ -32,16 +26,12 @@ namespace TelegramBot
                 UserConfog d = Singleton.Instance;
                 d.StartTemeUser();
             }
-            
-          
-
-             catch
+            catch
             {
                 HttpRuntime.UnloadAppDomain();
-
             }
-
         }
+
         //public override void Init()
         //{
         //    this.PostAuthenticateRequest += MvcApplication_PostAuthenticateRequest;
@@ -53,8 +43,5 @@ namespace TelegramBot
         //    System.Web.HttpContext.Current.SetSessionStateBehavior(
         //        SessionStateBehavior.Required);
         //}
-
-     
-
     }
 }

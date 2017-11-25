@@ -1,40 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Web;
 
 namespace TelegramBot.Temp
 {
-    
-        public static class Storage
+    public static class Storage
+    {
+        public static void SessionAdd<T>(string label, T value)
         {
-            public static void SessionAdd<T>(string label, T value)
+            if (!string.IsNullOrEmpty(label))
+                HttpContext.Current.Session.Add(label, value);
+        }
+
+        public static void SessionModify<T>(string label, T value)
+        {
+            if (HttpContext.Current.Session[label] != null)
             {
-                if (!string.IsNullOrEmpty(label))
-                    HttpContext.Current.Session.Add(label, value);
+                HttpContext.Current.Session[label] = value;
+                return;
             }
 
-            public static void SessionModify<T>(string label, T value)
-            {
-                if (HttpContext.Current.Session[label] != null)
-                {
-                    HttpContext.Current.Session[label] = value;
-                    return;
-                }
+            SessionAdd(label, value);
+        }
 
-                SessionAdd(label, value);
-            }
+        public static T SessionModifyAndReturn<T>(string label, T value) where T : class, new()
+        {
+            var content = new T();
+            if (HttpContext.Current.Session[label] != null)
+                HttpContext.Current.Session[label] = value;
+            else { SessionAdd(label, value); }
 
-            public static T SessionModifyAndReturn<T>(string label, T value) where T : class, new()
-            {
-                var content = new T();
-                if (HttpContext.Current.Session[label] != null)
-                    HttpContext.Current.Session[label] = value;
-                else { SessionAdd(label, value); }
-
-                content = value;
-                return content;
-            }
+            content = value;
+            return content;
         }
     }
- 
+}

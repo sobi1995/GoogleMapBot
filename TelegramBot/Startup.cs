@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Owin;
-using Microsoft.AspNet.SignalR;
 
 [assembly: OwinStartup(typeof(TelegramBot.Startup))]
 

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using GoogleMapBot.Models;
 using Microsoft.AspNet.SignalR;
-using TelegramBot.Models;
-using GoogleMapBot.Models;
 
 namespace TelegramBot.Hubs
 {
@@ -18,7 +13,8 @@ namespace TelegramBot.Hubs
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
             hubContext.Clients.All.addNewMessageToPage(DetailsUser);
         }
-        public void brodcast( string message)
+
+        public void brodcast(string message)
         {
             // Call the addNewMessageToPage method to update clients.
             Clients.All.MessageBrodcast(message);
