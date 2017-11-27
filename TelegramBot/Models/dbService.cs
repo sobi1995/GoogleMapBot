@@ -27,7 +27,7 @@ namespace GoogleMapBot.Models
                         Username = Ueser.Username,
                         LastName = Ueser.LastName,
                         Role = 0,
-                        Location = new Location() { X = 0, Y = 0 }
+                       Location=new Location() {X=0,Y=0 }
                     };
                     _db.Member.Add(StrtUser);
                     _db.SaveChanges();
@@ -80,11 +80,19 @@ namespace GoogleMapBot.Models
 
         public int UpdateLocation(Location Location, int UserId)
         {
-            var UpdateLocation = _db.Member.Find(UserId);
-            UpdateLocation.Location = Location;
+            _db.ChatRoom.Add(new ChatRoom() { Location = Location, Name = "x", Discraption = "sdsa" });
+            _db.SaveChanges();
+            //LoginChatRoom()
+            return 0;
+        }
+        public void LoginChatRoom(int UserId,int IdChatRooms) {
+
+            var FindUser = _db.Member.Find(UserId);
+            FindUser.ChatRoomId = IdChatRooms;
             _db.SaveChanges();
 
-            return 0;
+
+
         }
     }
 }

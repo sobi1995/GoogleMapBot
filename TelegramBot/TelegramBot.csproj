@@ -198,6 +198,7 @@
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ChatRoom.cs" />
+    <Compile Include="Models\GeoCodeCalc.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\dbService.cs" />
     <Compile Include="Models\UserConfog.cs" />
@@ -224,6 +225,9 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Webhook\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -52,7 +52,7 @@ namespace TelegramBot.Models
                         if (userDic[item.Key] <= 0)
                         {
                             WebhookController d = new WebhookController();
-                            d.TimeOut(Key);
+                           // d.TimeOut(Key);
 
                             RemoveUser(Key);
                         }

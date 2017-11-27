@@ -8,6 +8,7 @@ namespace TelegramBot.Models
         public int id { get; set; }
         public string Name { get; set; }
         public string Discraption { get; set; }
+        public Location Location { get; set; }
         public virtual List<Member> Member { get; set; }
     }
 }

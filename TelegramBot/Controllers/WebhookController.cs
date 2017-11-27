@@ -1,6 +1,7 @@
 ﻿using GoogleMapBot.Models;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -34,8 +35,29 @@ namespace CodeBlock.Bot.Engine.Controllers
             };
         }
 
-        public void Post(Update update)
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdateMsg(Update update)
         {
+            try
+            {
+
+        
+            TelegramBot.Models.Location l1 = new TelegramBot.Models.Location() { X =float.Parse("35/693124"), Y = float.Parse("51/417835") };
+            TelegramBot.Models.Location l2 = new TelegramBot.Models.Location() { X = float.Parse("35/698701"), Y = float.Parse("51/337525") };
+                //TelegramBot.Models.Location l1 = new TelegramBot.Models.Location() {X= 35/7009232,Y= 51/422829 };
+                //TelegramBot.Models.Location l2 = new TelegramBot.Models.Location() { X = 35/7009232, Y = 51/422829 };
+                //l1.X = 35/7009232;
+                //l1.Y = 51/422829;
+                //l2.X = 35/7009232;
+                //l2.Y = 51/422829;
+                var a = GeoCodeCalc.CalcDistance(l1.X, l1.Y, l2.X, l2.Y, GeoCodeCalcMeasurement.Kilometers);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+           
             UserDetails user = new UserDetails()
             {
                 FirstName = update.Message.From.FirstName,
@@ -55,7 +77,7 @@ namespace CodeBlock.Bot.Engine.Controllers
             {
                 ;
             }
-            //return Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -66,8 +88,9 @@ namespace CodeBlock.Bot.Engine.Controllers
             return "Yes Its Work";
         }
 
-        public void TextMessage(string text, UserDetails user)
+        private void TextMessage(string text, UserDetails user)
         {
+
             if (text == "/start")
             {
                 Member UserStart = new Member(user.UserId, user.FirstName, user.LastName, user.Username);
@@ -130,12 +153,12 @@ namespace CodeBlock.Bot.Engine.Controllers
 ;
         }
 
-        public void LocationMessage(TelegramBot.Models.Location Location, UserDetails user)
+        private async void LocationMessage(TelegramBot.Models.Location Location, UserDetails user)
         {
             _dbService.UpdateLocation(Location, user.UserId);
         }
 
-        public void TimeOut(int UserId)
+        private void TimeOut(int UserId)
         {
             string[] BtnImIbline = { "🔵  من  انلاین هستم" };
 

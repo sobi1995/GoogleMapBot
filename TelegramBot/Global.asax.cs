@@ -21,7 +21,7 @@ namespace TelegramBot
             try
             {
                 Telegram.Bot.Api bot = new Telegram.Bot.Api("438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A");
-                bot.SetWebhook("https://73c3bcda.ngrok.io/api/Webhook").Wait();
+                bot.SetWebhook("https://936933e3.ngrok.io/api/Webhook").Wait();
                 //UserConfog d = new UserConfog();
                 UserConfog d = Singleton.Instance;
                 d.StartTemeUser();
