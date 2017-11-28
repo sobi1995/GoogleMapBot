@@ -1,0 +1,147 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - My ASP.NET Application</title>
+    <script src="Scripts/modernizr-2.6.2.js"></script>
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <script src="Scripts/Entity/Telegram.js"></script>
+    <script src="Scripts/jquery.signalR-2.0.3.min.js"></script>
+    <script src="signalr/hubs"></script>
+    <script src="Scripts/respond.js"></script>
+    <style>
+        .marker {
+            display: block;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+        }
+    </style>
+    
+</head>
+<body>
+
+
+
+    <h2>Chat</h2>
+    <div class="container">
+        <input type="text" id="message" />
+        <input type="button" id="sendmessage" value="Send" />
+        <input type="hidden" id="displayname" />
+        <ul id="discussion"></ul>
+
+    </div>
+<div id="ChatPublick"></div>
+
+    <script>
+       
+        $(function () {
+        
+            var chat = $.connection.chatHub;
+            chat.client.addNewMessageToPage = function (message) {
+                debugger;
+                addMarker(message);
+                  $('#discussion').append('<li> ' + htmlEncode(message) + '</li>');
+            };
+
+            chat.client.MessageBrodcast = function (message) {
+             
+                $('#ChatPublick').append('<li> ' + htmlEncode(message) + '</li>');
+            };
+
+
+            $('#message').focus();
+
+            $.connection.hub.start().done(function () {
+                $('#sendmessage').click(function () {
+                    debugger;
+                    chat.server.brodcast($('#message').val());
+
+                    $('#message').val('').focus();
+                });
+            });
+        });
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+    </script>
+
+
+ <h1>My First Google Map</h1>
+
+    <div id="googleMap" style="width:100%;height:400px;"></div>
+ 
+   
+    <script>
+        
+  var map;
+      function initMap() {
+        var myLatLng = {lat: -25.363, lng: 131.044};
+
+        map = new google.maps.Map(document.getElementById('googleMap'), {
+          zoom: 4,
+          center: myLatLng
+        });
+
+       
+
+      }
+
+      
+      var marker;
+      function addMarker(Details) {
+          let x = Details.X.replace("/", ".");
+          let y = Details.Y.replace("/", ".");
+          var infoWindow = new google.maps.InfoWindow();
+          var myLatLng = { lat: parseFloat(x), lng: parseFloat(y) };
+          var icon = {
+              url:"https://api.telegram.org/file/bot423178669:AAE-lOeN5Hp0yC57FY_GiG5_JZxtvJNDk4I"+"/"+ Details.UrlUserProfile,
+              scaledSize: new google.maps.Size(38 , 38), // scaled size
+              origin: new google.maps.Point(0, 0), // origin
+              anchor: new google.maps.Point(0,0), // anchor
+          
+             
+             
+          };
+          data = marker;
+        marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: Details.UserName,
+          icon: icon,
+          animation: google.maps.Animation.BOUNCE,
+           
+        });
+        
+
+        (function (marker, data) {
+            google.maps.event.addListener(marker, "click", function (e) {
+                debugger;
+                //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
+                infoWindow.setContent("<div style = 'width:200px;min-height:40px'>" +
+                    Details.FirstName + "<br/>" + Details.lastName + "<br/>" + Details.Name +
+                    "<br/>" + Details.UserName + "<br/>" + Details.Name + "<br/>" + " <br/>" +
+                    Details.Age + "<br/>" + Details.Discraption +
+                    "   <input type=\"button\" value=\"PrivateChat\" /></div>");
+                infoWindow.open(map, marker);
+            });
+        })(marker, data);
+      }
+        
+    </script>
+    <script 
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-VzC5wzLDvJKUtnTbzj4AeQ5DwF9FJ3U&callback=initMap">
+    </script>
+   
+
+
+
+   
+</body>
+</html>
+ 
+  
