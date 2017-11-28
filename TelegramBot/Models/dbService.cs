@@ -94,5 +94,26 @@ namespace GoogleMapBot.Models
 
 
         }
+
+        public int SearchByNeartsRoom(int userid) {
+            var user = _db.Member.Where(x => x.UserId == userid).FirstOrDefault();
+            var ChatRooms = _db.ChatRoom.ToList();
+            int Distance = 0;
+            int result = 0;
+            foreach (var item in ChatRooms)
+            {
+                Distance =(int)( GeoCodeCalc.CalcDistance(user.Location.X, user.Location.Y, item.Location.X, item.Location.Y,GeoCodeCalcMeasurement.Kilometers));
+
+                if (Distance >= 10) {
+                    result = item.id;
+                    break;
+                }
+            }
+
+
+
+
+            return 0;
+        }
     }
 }

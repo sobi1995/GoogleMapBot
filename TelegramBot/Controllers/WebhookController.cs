@@ -41,16 +41,16 @@ namespace CodeBlock.Bot.Engine.Controllers
             try
             {
 
-        
-            TelegramBot.Models.Location l1 = new TelegramBot.Models.Location() { X =float.Parse("35/693124"), Y = float.Parse("51/417835") };
-            TelegramBot.Models.Location l2 = new TelegramBot.Models.Location() { X = float.Parse("35/698701"), Y = float.Parse("51/337525") };
-                //TelegramBot.Models.Location l1 = new TelegramBot.Models.Location() {X= 35/7009232,Y= 51/422829 };
-                //TelegramBot.Models.Location l2 = new TelegramBot.Models.Location() { X = 35/7009232, Y = 51/422829 };
-                //l1.X = 35/7009232;
-                //l1.Y = 51/422829;
-                //l2.X = 35/7009232;
-                //l2.Y = 51/422829;
-                var a = GeoCodeCalc.CalcDistance(l1.X, l1.Y, l2.X, l2.Y, GeoCodeCalcMeasurement.Kilometers);
+
+                TelegramBot.Models.Location l1 = new TelegramBot.Models.Location() { X = 35.693124, Y = 51.417835 };
+                TelegramBot.Models.Location l2 = new TelegramBot.Models.Location() { X = 35.698701, Y = 51.337525 };
+                //    //TelegramBot.Models.Location l1 = new TelegramBot.Models.Location() {X= 35/7009232,Y= 51/422829 };
+                //    //TelegramBot.Models.Location l2 = new TelegramBot.Models.Location() { X = 35/7009232, Y = 51/422829 };
+                //    //l1.X = 35/7009232;
+                //    //l1.Y = 51/422829;
+                //    //l2.X = 35/7009232;
+                //    //l2.Y = 51/422829;
+              var a = GeoCodeCalc.CalcDistance(l1.X, l1.Y, l2.X, l2.Y, GeoCodeCalcMeasurement.Kilometers);
             }
             catch (Exception ex)
             {
