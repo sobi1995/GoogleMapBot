@@ -10,7 +10,9 @@ namespace TelegramBot.Models
         public string Discraption { get; set; }
         public Location Location { get; set; }
         public virtual List<Member> Member { get; set; }
-
-        //dsfshdfsdfgjg
+        //dkfjhgjdshgfdsgfgsdfgds
+        //lsdfshdfksdkfgsdkf
+        //jhdfksdhfksdhk
+        
     }
 }
