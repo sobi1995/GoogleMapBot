@@ -17,7 +17,8 @@ namespace TelegramBot.Models
         {
             return CalcDistance(lat1, lng1, lat2, lng2, GeoCodeCalcMeasurement.Miles);
         }
-
+        //dsfsdfsdfsdf
+        //sdfsdfs
         public static double CalcDistance(double lat1, double lng1, double lat2, double lng2, GeoCodeCalcMeasurement m)
         {
             double radius = GeoCodeCalc.EarthRadiusInMiles;
