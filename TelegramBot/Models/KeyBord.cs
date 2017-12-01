@@ -1,4 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Net;
+using System.Text;
 using Telegram.Bot.Types;
 
 namespace GoogleMapBot.Models
@@ -89,4 +93,6 @@ namespace GoogleMapBot.Models
         public static List<string> Menu = new List<string>() { "👥   ساخت چت روم   👥 ", "عضویت در نزدیک ترین روم  📡", "📋    لیست روم ها    📋", "ورد به سایت", "رهنمایی", "درباره ما" };
         public static List<string> Profile = new List<string>() { "نام", "سن", "Bio" };
     }
-}//
+
+     
+} 

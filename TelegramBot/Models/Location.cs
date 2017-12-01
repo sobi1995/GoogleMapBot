@@ -3,7 +3,7 @@
 namespace TelegramBot.Models
 {
     [ComplexType]
-    public class Location
+    public class LocationM
     {
         public double X { get; set; }
         public double Y { get; set; }

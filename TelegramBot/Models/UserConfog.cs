@@ -24,7 +24,7 @@ namespace TelegramBot.Models
 
         public void Adduser(int UserId)
         {
-            userDic.Add(UserId, 7);
+            //userDic.Add(UserId, 1000);
         }
 
         public void RemoveUser(int UserId)

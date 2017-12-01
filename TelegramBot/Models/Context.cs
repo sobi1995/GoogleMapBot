@@ -12,7 +12,7 @@ namespace GoogleMapBot.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.ComplexType<UserDetails>();
-            modelBuilder.ComplexType<Location>();
+            modelBuilder.ComplexType<LocationM>();
             modelBuilder.Entity<Member>().HasOptional(x => x.ChatRoom).WithMany(x => x.Member).
                 HasForeignKey(x => x.ChatRoomId).
                 WillCascadeOnDelete();

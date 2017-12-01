@@ -7,10 +7,11 @@ namespace GoogleMapBot.Models
     {
         public int id { get; set; }
         public byte Role { get; set; }
-        public Location Location { get; set; }
+        public LocationM Location { get; set; }
         public virtual ChatRoom ChatRoom { get; set; }
         public int? ChatRoomId { get; set; }
-
+        public string Adrress { get; set; }
+        public Selectoption Instructions { get; set; }
         public Member(int UserId, string FirstName, string lastName, string UserName)
         {
             this.UserId = UserId;

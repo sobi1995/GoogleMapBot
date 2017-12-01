@@ -20,7 +20,7 @@ namespace CodeBlock.Bot.Engine.Controllers
         private static ReplyKeyboardMarkup main_menu_key;
 
         private static string image_savePath = @"C://robot_files//1.jpg";
-        private int Instructions = 0;
+ 
 
         public WebhookController()
         {
@@ -37,41 +37,31 @@ namespace CodeBlock.Bot.Engine.Controllers
 
         [HttpPost]
         public async Task<IHttpActionResult> UpdateMsg(Update update)
-        {
+       {
             try
             {
+              
+              
 
-
-                TelegramBot.Models.Location l1 = new TelegramBot.Models.Location() { X = 35.693124, Y = 51.417835 };
-                TelegramBot.Models.Location l2 = new TelegramBot.Models.Location() { X = 35.698701, Y = 51.337525 };
-                //    //TelegramBot.Models.Location l1 = new TelegramBot.Models.Location() {X= 35/7009232,Y= 51/422829 };
-                //    //TelegramBot.Models.Location l2 = new TelegramBot.Models.Location() { X = 35/7009232, Y = 51/422829 };
-                //    //l1.X = 35/7009232;
-                //    //l1.Y = 51/422829;
-                //    //l2.X = 35/7009232;
-                //    //l2.Y = 51/422829;
-              var a = GeoCodeCalc.CalcDistance(l1.X, l1.Y, l2.X, l2.Y, GeoCodeCalcMeasurement.Kilometers);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-           
+                TelegramBot.Models.LocationM l1 = new TelegramBot.Models.LocationM() { X = 35.693124, Y = 51.417835 };
+                TelegramBot.Models.LocationM l2 = new TelegramBot.Models.LocationM() { X = 35.698701, Y = 51.337525 };
+   
+              var a = GeoCodeCalc.CalcDistance(l1,l2, GeoCodeCalcMeasurement.Kilometers);
+      
             UserDetails user = new UserDetails()
             {
                 FirstName = update.Message.From.FirstName,
                 LastName = update.Message.From.LastName,
                 UserId = update.Message.From.Id,
-                Username = update.Message.From.Username
+                Username = update.Message.From.Username,
             };
-
-            try
-            {
+            Selectoption Instructions = new Selectoption();
+            Instructions =(Selectoption) _dbService.GetCurrentInstructionsUser(update.Message.From.Id);
+           
                 if (update.Message.Type == MessageType.TextMessage)
-                    TextMessage(update.Message.Text, user);
+                    TextMessage(update.Message.Text, user, Instructions);
                 else if (update.Message.Type == MessageType.LocationMessage)
-                    LocationMessage(new TelegramBot.Models.Location() { X = update.Message.Location.Latitude, Y = update.Message.Location.Longitude }, user);
+                    LocationMessage(new TelegramBot.Models.LocationM() { X = update.Message.Location.Latitude, Y = update.Message.Location.Longitude }, user);
             }
             catch (Exception ex)
             {
@@ -88,28 +78,20 @@ namespace CodeBlock.Bot.Engine.Controllers
             return "Yes Its Work";
         }
 
-        private void TextMessage(string text, UserDetails user)
+        private void TextMessage(string text, UserDetails user, Selectoption Instructions)
         {
 
             if (text == "/start")
             {
                 Member UserStart = new Member(user.UserId, user.FirstName, user.LastName, user.Username);
                 _dbService.AddWhenStart(UserStart);
-                string[] BtnImIbline = { "🔵  من  انلاین هستم" };
-
+                string[] BtnImIbline = { "🔵%  من  انلاین هستم" };
+                _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.UpdateLocationMember);
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(BtnImIbline, 2, 2, null));
                 dynamicKeyBord.ResizeKeyboard = true;
                 bot.SendTextMessage(user.UserId, text: "متن راهنمای ربات", replyMarkup: dynamicKeyBord);
             }
-            if (text.TrimAllSpase() == "🔵  من  انلاین هستم".TrimAllSpase())
-            {
-                userconfog.Adduser(user.UserId);
-
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true;
-
-                bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
-            }
+          
             else if (text.TrimAllSpase() == "بازگشت  🔙".TrimAllSpase())
             {
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
@@ -117,21 +99,27 @@ namespace CodeBlock.Bot.Engine.Controllers
 
                 bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
             }
-            else if (Instructions == 2)
-            {
-                string[] buttonChatRooms = { "🔴خروج" };
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(buttonChatRooms.ToArray(), 2, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true;
-                bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
-            }
+           
             else if (text.TrimAllSpase() == "👥ساخت چت روم👥".TrimAllSpase())
             {
-                Instructions = 1;
-                string[] CreateChatRoom = { "ارسال موقعیت % 📍", "بازگشت  🔙" };
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(CreateChatRoom, 1, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true;
+                int StatusCharRoom = _dbService.SearchByNeartsRoom(user.UserId);
+                if (StatusCharRoom != 0) {
+                    _dbService.LoginChatRoom(user.UserId, StatusCharRoom);
+                    string[] CreateChatRoom = { "end" };
+                    var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(CreateChatRoom, 1, 2, null));
+                    dynamicKeyBord.ResizeKeyboard = true;
+                    bot.SendTextMessage(chatId: user.UserId, text: "چت روم در محوطه مورد نظر ساخته شده است و شما هم اکنون به الان لاگین شدید", replyMarkup: dynamicKeyBord);
+                }
+                else
+                {
+                    _dbService.CreateChatRooms(user.UserId);
+                    _dbService.LoginChatRoom(user.UserId, _dbService.SearchByNeartsRoom(user.UserId));
+                    string[] CreateChatRoom = { "end" };
+                    var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(CreateChatRoom, 1, 2, null));
+                    dynamicKeyBord.ResizeKeyboard = true;
+                    bot.SendTextMessage(chatId: user.UserId, text: "چت روم ساحته شد و لفرار د نجاور 10 کیلومتری میتوانند لاگین بوشدن", replyMarkup: dynamicKeyBord);
+                }
 
-                bot.SendTextMessage(chatId: user.UserId, text: "لطفا اسم  چت روم خود را وارد کنید", replyMarkup: dynamicKeyBord);
             }
             else if (text.TrimAllSpase() == "📋    لیست روم ها    📋".TrimAllSpase())
             {
@@ -141,21 +129,20 @@ namespace CodeBlock.Bot.Engine.Controllers
 
                 bot.SendTextMessage(chatId: user.UserId, text: "👇🏻👇🏻👇🏻👇🏻👇🏻👫    لیســـــــــت  رومـــــــــــ ها    👫👇🏻👇🏻👇🏻👇🏻👇🏻👫", replyMarkup: dynamicKeyBord);
             }
-            else if (Instructions == 1)
-            {
-                _dbService.CreateChatRooms(text);
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true;
 
-                bot.SendTextMessage(chatId: user.UserId, text: "ثبت شد", replyMarkup: dynamicKeyBord);
-            }
-            var a = userconfog
-;
+            var a = userconfog;
         }
 
-        private async void LocationMessage(TelegramBot.Models.Location Location, UserDetails user)
+        private async void LocationMessage(TelegramBot.Models.LocationM Location, UserDetails user)
         {
+         
             _dbService.UpdateLocation(Location, user.UserId);
+            userconfog.Adduser(user.UserId);
+   
+            var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
+            dynamicKeyBord.ResizeKeyboard = true;
+
+            bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
         }
 
         private void TimeOut(int UserId)

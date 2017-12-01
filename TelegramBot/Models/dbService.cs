@@ -27,7 +27,8 @@ namespace GoogleMapBot.Models
                         Username = Ueser.Username,
                         LastName = Ueser.LastName,
                         Role = 0,
-                       Location=new Location() {X=0,Y=0 }
+                        Location = new LocationM() { X = 0, Y = 0 },
+                        Instructions = 0
                     };
                     _db.Member.Add(StrtUser);
                     _db.SaveChanges();
@@ -47,11 +48,16 @@ namespace GoogleMapBot.Models
             return _db.Member.Where(x => x.id == id).FirstOrDefault();
         }
 
-        public int CreateChatRooms(string Name)
+        public int CreateChatRooms(int Userid)
         {
-            _db.ChatRoom.Add(new ChatRoom() { Name = Name });
-            _db.SaveChanges();
-            return 1;
+      
+                Member usercreatechatRoom = _db.Member.Where(x => x.UserId == Userid).FirstOrDefault();
+
+                _db.ChatRoom.Add(new ChatRoom() { Location = usercreatechatRoom.Location, Discraption = "asdas" });
+                _db.SaveChanges();
+                return 1;
+        
+         
         }
 
         public List<ChatRoom> GetAllRoom()
@@ -78,16 +84,22 @@ namespace GoogleMapBot.Models
             return _db.Member.Where(x => x.UserId == id && x.ChatRoomId != null).Select(x => x.ChatRoomId).FirstOrDefault();
         }
 
-        public int UpdateLocation(Location Location, int UserId)
+        public int UpdateLocation(LocationM Location, int UserId)
         {
-            _db.ChatRoom.Add(new ChatRoom() { Location = Location, Name = "x", Discraption = "sdsa" });
+            string s1 = Location.X.ToString();
+            string s2 = Location.Y.ToString();
+            Decimal Latitude = Convert.ToDecimal(s1);
+            Decimal Longitude = Convert.ToDecimal(s2);
+            GeoCodeCalc.GetAddressFromLatLon(Latitude, Longitude);
+            var userIdUbdatelocation = _db.Member.Where(x => x.UserId == UserId).FirstOrDefault();
+            userIdUbdatelocation.Location = new LocationM() {X=Location.X.LocationDecimals(),Y=Location.Y.LocationDecimals() };
             _db.SaveChanges();
-            //LoginChatRoom()
+            SetCurrentInstructionsUser(UserId, Selectoption.Mnu);
             return 0;
         }
         public void LoginChatRoom(int UserId,int IdChatRooms) {
 
-            var FindUser = _db.Member.Find(UserId);
+            var FindUser = _db.Member.Where(X=> X.UserId==UserId).FirstOrDefault();
             FindUser.ChatRoomId = IdChatRooms;
             _db.SaveChanges();
 
@@ -98,13 +110,14 @@ namespace GoogleMapBot.Models
         public int SearchByNeartsRoom(int userid) {
             var user = _db.Member.Where(x => x.UserId == userid).FirstOrDefault();
             var ChatRooms = _db.ChatRoom.ToList();
-            int Distance = 0;
+           
             int result = 0;
+            
             foreach (var item in ChatRooms)
             {
-                Distance =(int)( GeoCodeCalc.CalcDistance(user.Location.X, user.Location.Y, item.Location.X, item.Location.Y,GeoCodeCalcMeasurement.Kilometers));
+               int Distanes= (int) Math.Round(GeoCodeCalc.CalcDistance(user.Location,item.Location,GeoCodeCalcMeasurement.Kilometers)) ;
 
-                if (Distance >= 10) {
+                if (Distanes <= 10 && Distanes >=0) {
                     result = item.id;
                     break;
                 }
@@ -113,7 +126,24 @@ namespace GoogleMapBot.Models
 
 
 
-            return 0;
+            return result;
         }
+
+   
+
+     public Selectoption GetCurrentInstructionsUser(int userid) {
+
+
+            return _db.Member.Where(x => x.UserId.Equals(userid)).Select(x => x.Instructions).FirstOrDefault();
+        }
+        public int SetCurrentInstructionsUser(int userid, Selectoption CurrentInstructionsUser) {
+            var user = _db.Member.Where(x => x.UserId.Equals(userid)).FirstOrDefault();
+            user.Instructions = CurrentInstructionsUser;
+            _db.SaveChanges();
+            return 1;
+
+
+        }
+
     }
 }
