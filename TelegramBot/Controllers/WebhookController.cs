@@ -1,5 +1,6 @@
 ﻿using GoogleMapBot.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -40,14 +41,6 @@ namespace CodeBlock.Bot.Engine.Controllers
        {
             try
             {
-              
-              
-
-                TelegramBot.Models.LocationM l1 = new TelegramBot.Models.LocationM() { X = 35.693124, Y = 51.417835 };
-                TelegramBot.Models.LocationM l2 = new TelegramBot.Models.LocationM() { X = 35.698701, Y = 51.337525 };
-   
-              var a = GeoCodeCalc.CalcDistance(l1,l2, GeoCodeCalcMeasurement.Kilometers);
-      
             UserDetails user = new UserDetails()
             {
                 FirstName = update.Message.From.FirstName,
@@ -55,13 +48,19 @@ namespace CodeBlock.Bot.Engine.Controllers
                 UserId = update.Message.From.Id,
                 Username = update.Message.From.Username,
             };
+
             Selectoption Instructions = new Selectoption();
             Instructions =(Selectoption) _dbService.GetCurrentInstructionsUser(update.Message.From.Id);
-           
-                if (update.Message.Type == MessageType.TextMessage)
-                    TextMessage(update.Message.Text, user, Instructions);
-                else if (update.Message.Type == MessageType.LocationMessage)
-                    LocationMessage(new TelegramBot.Models.LocationM() { X = update.Message.Location.Latitude, Y = update.Message.Location.Longitude }, user);
+                if (update.Message.Text == "من افلاین هستم  🔴")
+                    LogOut(update.Message.From.Id, 1);
+                else if (Instructions == Selectoption.LoginInChatRoom)
+                    SendMesgOnChatRoom(user, update.Message.Text);
+                else if (Instructions == Selectoption.Start)
+                    Start(update.Message.Text, user);
+                else if (Instructions == Selectoption.Mnu)
+                    Mnu(update.Message.Text, user);
+                else if (Instructions == Selectoption.ImOnline)
+                    Updatelocation(new TelegramBot.Models.LocationM() { X = update.Message.Location.Latitude, Y = update.Message.Location.Longitude }, user);
             }
             catch (Exception ex)
             {
@@ -77,81 +76,101 @@ namespace CodeBlock.Bot.Engine.Controllers
         {
             return "Yes Its Work";
         }
-
-        private void TextMessage(string text, UserDetails user, Selectoption Instructions)
+        public void LogOut(int UserId,int TypeLogOut)
+        {
+            string strMsgLogOut = "";
+            if (TypeLogOut == 1) 
+                strMsgLogOut = " شما م اکنور به حالت افلاین رفتید در صورت تمایل بر رویع من انلاین هسان کلیک کنید";
+               else
+                strMsgLogOut = " ب دلیل استفاده  نکردن مداوم از بات   شما به حالت تعویق  در امدید در صورت تمایل بر رویع من انلاین هستم کلیک کنید ";
+            _dbService.SetCurrentInstructionsUser(UserId, Selectoption.ImOnline);
+            LogChatRoom(UserId);
+            SendMesgOnChatRoom(new UserDetails() { FirstName = "Bot  : ", UserId = UserId }, _dbService.GetFirstnameId(UserId) + "❌  از بات روم خارج شد");
+              Sendmsg(UserId, strMsgLogOut, new List<string> { "🔵%  من  انلاین هستم" });
+          
+        }
+        public void LogChatRoom(int UserId)
+        {
+            _dbService.LogOutChatRoom(UserId);
+        }
+        void SendMesgOnChatRoom(UserDetails user, string Msg)
         {
 
-            if (text == "/start")
+         
+            var userOnChaRoom = _dbService.GetUserOnCharRoom(_dbService.GetCahtRoomidUser(user.UserId));
+            foreach (var item in userOnChaRoom)
             {
-                Member UserStart = new Member(user.UserId, user.FirstName, user.LastName, user.Username);
-                _dbService.AddWhenStart(UserStart);
-                string[] BtnImIbline = { "🔵%  من  انلاین هستم" };
-                _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.UpdateLocationMember);
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(BtnImIbline, 2, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true;
-                bot.SendTextMessage(user.UserId, text: "متن راهنمای ربات", replyMarkup: dynamicKeyBord);
+                if (item == user.UserId) continue;
+                bot.SendTextMessage(item, user.FirstName+" : "+ Msg);
             }
-          
-            else if (text.TrimAllSpase() == "بازگشت  🔙".TrimAllSpase())
-            {
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true;
 
-                bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
-            }
-           
-            else if (text.TrimAllSpase() == "👥ساخت چت روم👥".TrimAllSpase())
+
+        }
+        void Mnu(string text, UserDetails user)
+        {
+                if (text.TrimAllSpase() == "👥ساخت چت روم👥".TrimAllSpase()
+                || text.TrimAllSpase() == "عضویت در نزدیک ترین روم  📡".TrimAllSpase())
             {
                 int StatusCharRoom = _dbService.SearchByNeartsRoom(user.UserId);
-                if (StatusCharRoom != 0) {
+                if (StatusCharRoom != 0)
+                {
                     _dbService.LoginChatRoom(user.UserId, StatusCharRoom);
-                    string[] CreateChatRoom = { "end" };
-                    var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(CreateChatRoom, 1, 2, null));
-                    dynamicKeyBord.ResizeKeyboard = true;
-                    bot.SendTextMessage(chatId: user.UserId, text: "چت روم در محوطه مورد نظر ساخته شده است و شما هم اکنون به الان لاگین شدید", replyMarkup: dynamicKeyBord);
+                    Sendmsg(user.UserId, "چت روم در محوطه مورد نظر ساخته شده است و شما هم اکنون به الان لاگین شدید", new List<string> { " بازگشت   🔙" });
+                    SendMesgOnChatRoom(user, user.FirstName + "به رم لاگین شد");
                 }
+
                 else
                 {
                     _dbService.CreateChatRooms(user.UserId);
                     _dbService.LoginChatRoom(user.UserId, _dbService.SearchByNeartsRoom(user.UserId));
-                    string[] CreateChatRoom = { "end" };
-                    var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(CreateChatRoom, 1, 2, null));
-                    dynamicKeyBord.ResizeKeyboard = true;
-                    bot.SendTextMessage(chatId: user.UserId, text: "چت روم ساحته شد و لفرار د نجاور 10 کیلومتری میتوانند لاگین بوشدن", replyMarkup: dynamicKeyBord);
+                    Sendmsg(user.UserId, "چت روم با موفقیت ساحته شد و افرد میتوانند در صورت جست وجو نزدریک ترین چت روم در ان عضو شودند", new List<string> { " بازگشت   🔙" });
                 }
-
+                _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.LoginInChatRoom);
             }
-            else if (text.TrimAllSpase() == "📋    لیست روم ها    📋".TrimAllSpase())
-            {
-                var Rooms = _dbService.GetAllRoom();
-                var dynamicKeyBord = new InlineKeyboardMarkup(KeyBord.GetInlineKeyboard(Rooms.Select(x => x.Name).ToArray(), Rooms.Select(x => x.id.ToString()).ToArray(), 1, 2, null));
-                //
+             
 
-                bot.SendTextMessage(chatId: user.UserId, text: "👇🏻👇🏻👇🏻👇🏻👇🏻👫    لیســـــــــت  رومـــــــــــ ها    👫👇🏻👇🏻👇🏻👇🏻👇🏻👫", replyMarkup: dynamicKeyBord);
-            }
 
-            var a = userconfog;
+
         }
-
-        private async void LocationMessage(TelegramBot.Models.LocationM Location, UserDetails user)
+        void Start(string text, UserDetails user)
         {
-         
+            if (text == "/start")
+            {
+                Member UserStart = new Member(user.UserId, user.FirstName, user.LastName, user.Username);
+                _dbService.AddWhenStart(UserStart);             
+                _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.ImOnline);
+                Sendmsg(user.UserId, "برای اینکه  بتوانید از سرویس های بات استفاده کنید  رو گزینه زیر کلیک کرده  نا موقعیت کنونی شما برا اطرافیان  تشخیص داده شود", new List<string>() {   "🔵% من  انلاین هستم"  });
+            }
+
+        }
+        void Sendmsg(int UserId, string Msg, List<string> Buuton) {
+
+
+       if(_dbService.GetCurrentInstructionsUser(UserId)!=Selectoption.ImOnline)     Buuton.Add("من افلاین هستم  🔴");
+             var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(Buuton.ToArray(), 2, 2, null));
+            dynamicKeyBord.ResizeKeyboard = true;
+            bot.SendTextMessage(UserId, text: Msg, replyMarkup: dynamicKeyBord);
+
+
+
+        }
+        void Updatelocation(TelegramBot.Models.LocationM Location, UserDetails user) {
+
+
             _dbService.UpdateLocation(Location, user.UserId);
             userconfog.Adduser(user.UserId);
-   
-            var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(KeyBord.Menu.ToArray(), 2, 2, null));
-            dynamicKeyBord.ResizeKeyboard = true;
+            _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.Mnu);
+            Sendmsg(user.UserId, "مکان شما با موفقیت ثبت شد\n  از منو زیر سرویس مور علاقع خود را انتخاب کنید", KeyBord.Menu.ToList());
 
-            bot.SendTextMessage(chatId: user.UserId, text: "گزینه مورد نظر را انتخاب کنید", replyMarkup: dynamicKeyBord);
+
         }
 
-        private void TimeOut(int UserId)
-        {
-            string[] BtnImIbline = { "🔵  من  انلاین هستم" };
+        void back(int UserId, string Msg) {
 
-            var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(BtnImIbline, 2, 2, null));
-            dynamicKeyBord.ResizeKeyboard = true;
-            bot.SendTextMessage(UserId, text: "متن راهنمای ربات", replyMarkup: dynamicKeyBord);
-        }
+            if (_dbService.GetCurrentInstructionsUser(UserId) == Selectoption.LoginInChatRoom)
+                LogChatRoom(UserId);
+            Sendmsg(UserId, "لطفن از سرویس هی زیر یکی را  انتخاب کندی", KeyBord.Menu);
+        } 
     }
+
 }

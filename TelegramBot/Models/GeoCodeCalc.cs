@@ -36,13 +36,13 @@ namespace TelegramBot.Models
             return radius * 2 * Math.Asin(Math.Min(1, Math.Sqrt((Math.Pow(Math.Sin((DiffRadian(Location1.X, Location2.X)) / 2.0), 2.0) + Math.Cos(ToRadian(Location1.X)) * Math.Cos(ToRadian(Location2.X)) * Math.Pow(Math.Sin((DiffRadian(Location1.Y, Location2.Y)) / 2.0), 2.0)))));
         }
 
-        public static void GetAddressFromLatLon(Decimal Latitude, Decimal Longitude)
+        public static string GetAddressFromLatLon(Decimal Latitude, Decimal Longitude)
         {
             string result = null;
             System.Net.WebClient webClient = new System.Net.WebClient();
             string s1 = Latitude.ToString().Replace("/", ".");
             string s2 = Longitude.ToString().Replace("/", "."); ;
-            var apiUrl = "https://maps.googleapis.com/maps/api/geocode/xml?latlng=34.3339424133301,46.6876678466797&sensor=false";
+            var apiUrl = "https://maps.googleapis.com/maps/api/geocode/xml?latlng="+s1+","+s2+"&sensor=false";
             var searchRequest = "";
             webClient.Headers.Add("content-type", "application/x-www-form-urlencoded");
             result = webClient.UploadString(apiUrl, searchRequest);
@@ -52,6 +52,7 @@ namespace TelegramBot.Models
             string CountryName = string.Empty;
             string StateCode = string.Empty;
             string stateName = string.Empty;
+          
             foreach (XmlNode node in xbook.DocumentElement.ChildNodes)
             {
                 if (node.Name == "result")
@@ -97,7 +98,7 @@ namespace TelegramBot.Models
                 }
             }
 
-
+            return CountryCode + "-" + CountryName + "-" + StateCode + "-" + stateName;
         }
          
     }

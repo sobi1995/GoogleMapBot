@@ -24,14 +24,14 @@ namespace TelegramBot.Models
 
         public void Adduser(int UserId)
         {
-            //userDic.Add(UserId, 1000);
+     //userDic.Add(UserId, 250);
         }
 
         public void RemoveUser(int UserId)
         {
-            var b = userDic;
+     
             userDic.Remove(UserId);
-            var a = userDic;
+    
         }
 
         public async Task TimeStayUser()
@@ -40,8 +40,8 @@ namespace TelegramBot.Models
             {
                 while (true)
                 {
-                    Thread.Sleep(5000);
-                    Debug.WriteLine(userDic.Count.ToString());
+                    Thread.Sleep(1000);
+                  
                     if (userDic.Count <= 0)
                         continue;
                     foreach (var item in userDic.ToList())
@@ -49,10 +49,11 @@ namespace TelegramBot.Models
                         userDic[item.Key] -= 1;
                         var a = userDic[item.Key];
                         int Key = userDic.Select(x => x.Key).FirstOrDefault();
+                        Debug.WriteLine(userDic[item.Key].ToString());
                         if (userDic[item.Key] <= 0)
                         {
                             WebhookController d = new WebhookController();
-                           // d.TimeOut(Key);
+                               d.LogOut(Key,0);
 
                             RemoveUser(Key);
                         }

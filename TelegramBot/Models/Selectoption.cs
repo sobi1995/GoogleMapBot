@@ -7,9 +7,11 @@ namespace TelegramBot.Models
 {
     public enum Selectoption
     {
-        UpdateLocationMember=1,
-        Nothing=0,
-        Mnu=2
+        ImOnline=1,
+        Start=0,
+        Mnu=2,
+        LoginInChatRoom=3,
+       
 
     }
 }
