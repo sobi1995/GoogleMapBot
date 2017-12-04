@@ -1,7 +1,12 @@
 ﻿using GoogleMapBot.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Telegram.Bot;
@@ -41,6 +46,7 @@ namespace CodeBlock.Bot.Engine.Controllers
        {
             try
             {
+
             UserDetails user = new UserDetails()
             {
                 FirstName = update.Message.From.FirstName,
@@ -49,7 +55,9 @@ namespace CodeBlock.Bot.Engine.Controllers
                 Username = update.Message.From.Username,
             };
 
-            Selectoption Instructions = new Selectoption();
+                GetImageProfileAddres(user.UserId, "dsf");
+                return Ok();
+               Selectoption Instructions = new Selectoption();
             Instructions =(Selectoption) _dbService.GetCurrentInstructionsUser(update.Message.From.Id);
                 if (update.Message.Text == "من افلاین هستم  🔴")
                     LogOut(update.Message.From.Id, 1);
@@ -164,13 +172,45 @@ namespace CodeBlock.Bot.Engine.Controllers
 
 
         }
-
         void back(int UserId, string Msg) {
 
             if (_dbService.GetCurrentInstructionsUser(UserId) == Selectoption.LoginInChatRoom)
                 LogChatRoom(UserId);
             Sendmsg(UserId, "لطفن از سرویس هی زیر یکی را  انتخاب کندی", KeyBord.Menu);
-        } 
+        }
+        string GetFilePatchInApi(string  FileId) {
+
+            string Filepatch = "";
+            using (WebClient wc = new WebClient())
+            {
+                var json = wc.DownloadString("https://api.telegram.org/bot438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A/getFile?file_id="+ FileId);
+
+                JObject obj = JObject.Parse(json);
+                JObject name = (JObject)obj["result"];
+                Filepatch = (string)name["file_path"];
+            }
+            return Filepatch;
+        }
+        async void GetImageProfileAddres(int id, string Txt)
+       {
+            var photokk = bot.GetUserProfilePhotosAsync(id).Result.Photos;
+            string FilePatch = GetFilePatchInApi(photokk[0][0].FileId);
+        
+                string sss = "https://api.telegram.org/file/bot438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A/" + FilePatch;
+                bot.SendPhoto(id, photo: "https://api.telegram.org/file/bot438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A/" + FilePatch, caption: "hii");
+           
+       
+
+            //await Bot.SendPhoto(id,photo.Photos,"sdfsdf");
+        }
+
+        void SendPhto(int id) {
+
+    //  bot.SendPhoto(id, photo: "https://api.telegram.org/file/bot438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A/"+, caption: "hii");
+          
+
+        }
     }
 
 }
+ 
