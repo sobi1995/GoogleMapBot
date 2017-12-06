@@ -168,5 +168,11 @@ namespace GoogleMapBot.Models
 
 
         }
+        public UserDetails GetUserByUserId(int id)
+        {
+
+            return _db.Member.Where(x => x.UserId == id).FirstOrDefault();
+
+        }
     }
 }
