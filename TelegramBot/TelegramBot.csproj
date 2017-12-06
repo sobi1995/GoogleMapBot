@@ -202,7 +202,8 @@
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ChatRoom.cs" />
-    <Compile Include="Models\GeoCodeCalc.cs" />
+    <Compile Include="Models\GeneralFunactions.cs" />
+    <Compile Include="Models\GoogleMapAlgorithm.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\dbService.cs" />
     <Compile Include="Models\Selectoption.cs" />
@@ -229,6 +230,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ImgProfiles\photos\" />
     <Folder Include="Views\Webhook\" />
   </ItemGroup>
   <ItemGroup>

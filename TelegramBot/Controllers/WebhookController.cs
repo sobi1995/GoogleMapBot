@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -54,9 +55,10 @@ namespace CodeBlock.Bot.Engine.Controllers
                 UserId = update.Message.From.Id,
                 Username = update.Message.From.Username,
             };
-
-                GetImageProfileAddres(user.UserId, "dsf");
-                return Ok();
+                SaveProfileOnDisk(user.UserId);
+                return Ok("");
+                //SaveProfileOnDisk(user.UserId, "dsf");
+                //return Ok();
                Selectoption Instructions = new Selectoption();
             Instructions =(Selectoption) _dbService.GetCurrentInstructionsUser(update.Message.From.Id);
                 if (update.Message.Text == "من افلاین هستم  🔴")
@@ -144,8 +146,11 @@ namespace CodeBlock.Bot.Engine.Controllers
         {
             if (text == "/start")
             {
+                if (!_dbService.IsUser(user.UserId)) { 
                 Member UserStart = new Member(user.UserId, user.FirstName, user.LastName, user.Username);
-                _dbService.AddWhenStart(UserStart);             
+                _dbService.AddWhenStart(UserStart);
+                    SaveProfileOnDisk(user.UserId);
+                }
                 _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.ImOnline);
                 Sendmsg(user.UserId, "برای اینکه  بتوانید از سرویس های بات استفاده کنید  رو گزینه زیر کلیک کرده  نا موقعیت کنونی شما برا اطرافیان  تشخیص داده شود", new List<string>() {   "🔵% من  انلاین هستم"  });
             }
@@ -178,7 +183,7 @@ namespace CodeBlock.Bot.Engine.Controllers
                 LogChatRoom(UserId);
             Sendmsg(UserId, "لطفن از سرویس هی زیر یکی را  انتخاب کندی", KeyBord.Menu);
         }
-        string GetFilePatchInApi(string  FileId) {
+        string GetFileNameProfile(string  FileId) {
 
             string Filepatch = "";
             using (WebClient wc = new WebClient())
@@ -191,15 +196,31 @@ namespace CodeBlock.Bot.Engine.Controllers
             }
             return Filepatch;
         }
-        async void GetImageProfileAddres(int id, string Txt)
+        string GetUrlProfile(string FileId) {
+
+            return "https://api.telegram.org/file/bot438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A/" + FileId;
+
+        }
+        async void SaveProfileOnDisk(int id)
        {
-            var photokk = bot.GetUserProfilePhotosAsync(id).Result.Photos;
-            string FilePatch = GetFilePatchInApi(photokk[0][0].FileId);
-        
-                string sss = "https://api.telegram.org/file/bot438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A/" + FilePatch;
-                bot.SendPhoto(id, photo: "https://api.telegram.org/file/bot438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A/" + FilePatch, caption: "hii");
            
-       
+          var Photos = bot.GetUserProfilePhotosAsync(id).Result.Photos;
+            string FileId = Photos[0][2].FileId;
+            string FileName = GetFileNameProfile(FileId);
+            string FileUrl = GetUrlProfile(FileName);
+        
+            GeneralFunactions.save_file_from_url(id.ToString(), FileUrl);
+            //GeneralFunactions.save_file_from_url(FilePatch, FileUrl);
+
+            //using (var stream = System.IO.File.Open(FileUrl, FileMode.Open))
+            //{
+
+            //    FileToSend fts = new FileToSend();
+            //    fts.Content = stream;
+            //    fts.Filename = FileUrl.Split('\\').Last();
+            //    var test = await bot.SendPhoto(id, fts, "My Text");
+            //}
+
 
             //await Bot.SendPhoto(id,photo.Photos,"sdfsdf");
         }

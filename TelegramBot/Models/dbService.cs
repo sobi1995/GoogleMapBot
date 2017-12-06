@@ -162,5 +162,11 @@ namespace GoogleMapBot.Models
             return _db.Member.Where(x => x.UserId == UserId).Select(x => x.FirstName).SingleOrDefault();
 
         }
+        public bool IsUser(int Userid) {
+
+            return _db.Member.Any(x => x.UserId == Userid);
+
+
+        }
     }
 }
