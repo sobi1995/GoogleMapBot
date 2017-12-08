@@ -6,13 +6,12 @@ namespace TelegramBot.Hubs
 {
     public class ChatHub : Hub
     {
-        public void Send(string message)
+        public void SendPhotoOnMap(UserDetails UserDetails)
         {
             // Call the addNewMessageToPage method to update clients.
-            message = "sdjfksjdfjhfk";
-            //Clients.All.addnewmessagetopage(message);
+         //Clients.All.addnewmessagetopage(message);
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
-             hubContext.Clients.All.addNewMessageToPage(message);
+             hubContext.Clients.All.addNewMessageToPage(UserDetails);
         }
 
         public void brodcast(string message)
@@ -22,5 +21,14 @@ namespace TelegramBot.Hubs
             hubContext.Clients.All.MessageBrodcast(message);
             //Clients.All.MessageBrodcast(message);
         }
+
+        public void deleteonmap(string username)
+        {
+            // Call the addNewMessageToPage method to update clients.
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            hubContext.Clients.All.DeleteOnMap(username);
+            //Clients.All.MessageBrodcast(message);
+        }
+
     }
 }

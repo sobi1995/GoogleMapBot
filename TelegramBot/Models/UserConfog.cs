@@ -54,6 +54,8 @@ namespace TelegramBot.Models
                         {
                             WebhookController d = new WebhookController();
                                d.LogOut(Key,0);
+                          
+                          
 
                             RemoveUser(Key);
                         }

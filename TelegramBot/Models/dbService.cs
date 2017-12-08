@@ -39,10 +39,10 @@ namespace GoogleMapBot.Models
             }
             return 0;
         }
-        public Member GetUser(long id)
+        public Member GetUser(int UserID)
         {
-            var r = _db.Member.Where(x => x.id.Equals(id)).FirstOrDefault();
-            return _db.Member.Where(x => x.id == id).FirstOrDefault();
+      
+            return _db.Member.Where(x => x.UserId.Equals(UserID)).FirstOrDefault();
         }
         public int CreateChatRooms(int Userid)
         {
@@ -125,7 +125,7 @@ namespace GoogleMapBot.Models
         public Selectoption GetCurrentInstructionsUser(int userid)
         {
 
-
+         
             return _db.Member.Where(x => x.UserId.Equals(userid)).Select(x => x.Instructions).FirstOrDefault();
         }
         public int SetCurrentInstructionsUser(int userid, Selectoption CurrentInstructionsUser)

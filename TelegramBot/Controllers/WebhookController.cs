@@ -28,28 +28,17 @@ namespace CodeBlock.Bot.Engine.Controllers
         private Api bot;
         private static ReplyKeyboardMarkup main_menu_key;
         Thread d;
-        private static string image_savePath = @"C://robot_files//1.jpg";
+     
         public WebhookController()
         {
             bot = new Api("438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A");
-             d = new Thread(new ThreadStart(Send));
-            d.Start();
+            _dbService = new dbService();
         }
-        void Send() {
-            ChatHub d = new ChatHub();
-          
-                
-            while (true)
-            {
-                Thread.Sleep(1000);
-                  d.Send("dddd");
-            }
-
-
-        }
+    
         [HttpPost]
         public async Task<IHttpActionResult> UpdateMsg(Update update)
         {
+
             try
             {
 
@@ -59,6 +48,8 @@ namespace CodeBlock.Bot.Engine.Controllers
                     LastName = update.Message.From.LastName,
                     UserId = update.Message.From.Id,
                     Username = update.Message.From.Username,
+                    Y="",
+                    X =""
                 };
               
 
@@ -84,24 +75,28 @@ namespace CodeBlock.Bot.Engine.Controllers
         /// <summary>
         /// یک متد برای تست وب سرویس
         /// </summary>
-        public string Get()
+         string Get()
         {
             return "Yes Its Work";
         }
-        public void LogOut(int UserId, int TypeLogOut)
+       public  void LogOut(int UserId, int TypeLogOut)
         {
             string strMsgLogOut = "";
             if (TypeLogOut == 1)
                 strMsgLogOut = " شما م اکنور به حالت افلاین رفتید در صورت تمایل بر رویع من انلاین هسان کلیک کنید";
             else
                 strMsgLogOut = " ب دلیل استفاده  نکردن مداوم از بات   شما به حالت تعویق  در امدید در صورت تمایل بر رویع من انلاین هستم کلیک کنید ";
-            _dbService.SetCurrentInstructionsUser(UserId, Selectoption.ImOnline);
+         
             LogChatRoom(UserId);
             SendMesgOnChatRoom(new UserDetails() { FirstName = "Bot  : ", UserId = UserId }, _dbService.GetFirstnameId(UserId) + "❌  از بات روم خارج شد");
             Sendmsg(UserId, strMsgLogOut, new List<string> { "🔵%  من  انلاین هستم" });
+            _dbService.SetCurrentInstructionsUser(UserId, Selectoption.ImOnline);
+            ChatHub DeleteOnMap = new ChatHub();
+            string Username = _dbService.GetUser(UserId).Username;
+            DeleteOnMap.deleteonmap(Username);
 
         }
-        public void LogChatRoom(int UserId)
+         void LogChatRoom(int UserId)
         {
             _dbService.LogOutChatRoom(UserId);
         }
@@ -178,14 +173,16 @@ namespace CodeBlock.Bot.Engine.Controllers
             _dbService.UpdateLocation(Location, user.UserId);
             userconfog.Adduser(user.UserId);
             _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.Mnu);
-            SendLocationOnGoogleMap(user.UserId);
+
             Sendmsg(user.UserId, "مکان شما با موفقیت ثبت شد\n  از منو زیر سرویس مور علاقع خود را انتخاب کنید", KeyBord.Menu.ToList());
-         
+            user.X = Location.X.ToString();
+            user.Y = Location.Y.ToString();
+            SendLocationOnGoogleMap(user);
 
         }
-        void SendLocationOnGoogleMap(int userID) {
+        void SendLocationOnGoogleMap(UserDetails user) {
             ChatHub WebSocket = new ChatHub();
-            WebSocket.Send("fsdf");
+          WebSocket.SendPhotoOnMap(user);
 
         }
         void back(int UserId, string Msg)

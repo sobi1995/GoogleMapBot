@@ -40,9 +40,17 @@
             debugger;
             var chat = $.connection.chatHub;
             chat.client.addnewmessagetopage = function (message) {
-                debugger;
+                
                 addMarker(message);
+           
                   $('#discussion').append('<li> ' + htmlEncode(message) + '</li>');
+            };
+
+        
+            chat.client.DeleteOnMap = function (message) {
+                debugger;
+                DeleteMarker(message);
+              
             };
 
             chat.client.MessageBrodcast = function (message) {
@@ -85,13 +93,27 @@
       }
 
       var marker;
+
+      function DeleteMarker(user) {
+          //Find and remove the marker from the Array
+          for (var i = 0; i <= marker.length; i++) {
+              if (marker[i].title == user.UserName) {
+                  //Remove the marker from Map                  
+                  marker[i].setMap(null);
+
+                  //Remove the marker from array.
+                  marker.splice(i, 1);
+                  return;
+              }
+          }
+      };
       function addMarker(Details) {
           let x = Details.X.replace("/", ".");
           let y = Details.Y.replace("/", ".");
           var infoWindow = new google.maps.InfoWindow();
           var myLatLng = { lat: parseFloat(x), lng: parseFloat(y) };
           var icon = {
-              url:"https://api.telegram.org/file/bot423178669:AAE-lOeN5Hp0yC57FY_GiG5_JZxtvJNDk4I"+"/"+ Details.UrlUserProfile,
+              url: "http://localhost:58000/ImgProfiles/Profile" + Details.UserId + ".jpg",
               scaledSize: new google.maps.Size(38 , 38), // scaled size
               origin: new google.maps.Point(0, 0), // origin
               anchor: new google.maps.Point(0,0), // anchor
@@ -104,8 +126,10 @@
           title: Details.UserName,
           icon: icon,
           animation: google.maps.Animation.BOUNCE,
-
+        
         });
+
+
 
         (function (marker, data) {
             google.maps.event.addListener(marker, "click", function (e) {
