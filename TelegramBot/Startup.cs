@@ -12,8 +12,8 @@ namespace TelegramBot
         {
             // Any connection or hub wire up and configuration should go here
 
-            app.MapSignalR();
-            app.MapSignalR("/~/signalr", new HubConfiguration());
+             app.MapSignalR();
+ //app.MapSignalR("/~/signalr", new HubConfiguration());
         }
     }
 }

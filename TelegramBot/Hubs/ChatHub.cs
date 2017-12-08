@@ -6,19 +6,21 @@ namespace TelegramBot.Hubs
 {
     public class ChatHub : Hub
     {
-        public void Send(UserDetails DetailsUser)
+        public void Send(string message)
         {
             // Call the addNewMessageToPage method to update clients.
-
-             Clients.All.addnewmessagetopage("dsfsd");
-            //var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
-            //hubContext.Clients.All.addNewMessageToPage(DetailsUser);
+            message = "sdjfksjdfjhfk";
+            //Clients.All.addnewmessagetopage(message);
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+             hubContext.Clients.All.addNewMessageToPage(message);
         }
 
         public void brodcast(string message)
         {
             // Call the addNewMessageToPage method to update clients.
-            Clients.All.MessageBrodcast(message);
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            hubContext.Clients.All.MessageBrodcast(message);
+            //Clients.All.MessageBrodcast(message);
         }
     }
 }

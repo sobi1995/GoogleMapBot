@@ -5,10 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat - My ASP.NET Application</title>
-    <script src="Scripts/modernizr-2.6.2.js"></script>
     <script src="Scripts/jquery-1.10.2.js"></script>
+    <script src="Scripts/modernizr-2.6.2.js"></script>
+
     <script src="Scripts/Entity/Telegram.js"></script>
-    <script src="Scripts/jquery.signalR-2.0.3.min.js"></script>
+ 
+    <script src="Scripts/jquery.signalR-2.0.3.js"></script>
     <script src="signalr/hubs"></script>
     <script src="Scripts/respond.js"></script>
     <style>
@@ -36,9 +38,9 @@
 
         $(function () {
             debugger;
-            var chat = $.connection.ChatHub;
-            chat.Clients.All.addnewmessagetopage = function (message) {
-              
+            var chat = $.connection.chatHub;
+            chat.client.addnewmessagetopage = function (message) {
+                debugger;
                 addMarker(message);
                   $('#discussion').append('<li> ' + htmlEncode(message) + '</li>');
             };

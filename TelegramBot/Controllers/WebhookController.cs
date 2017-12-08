@@ -42,7 +42,7 @@ namespace CodeBlock.Bot.Engine.Controllers
             while (true)
             {
                 Thread.Sleep(1000);
-                  d.Send(new UserDetails() { FirstName = "da", LastName = "dsfsd", UserId = 1, Username = "sdfsdf", X = "zfdsfsd" });
+                  d.Send("dddd");
             }
 
 
@@ -185,7 +185,7 @@ namespace CodeBlock.Bot.Engine.Controllers
         }
         void SendLocationOnGoogleMap(int userID) {
             ChatHub WebSocket = new ChatHub();
-            WebSocket.Send(_dbService.GetUserByUserId(userID));
+            WebSocket.Send("fsdf");
 
         }
         void back(int UserId, string Msg)
