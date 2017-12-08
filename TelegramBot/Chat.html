@@ -81,7 +81,7 @@
 
     <script>
 
-  var map;
+        var map, infoWindow;
       function initMap() {
         var myLatLng = {lat: -25.363, lng: 131.044};
 
@@ -89,10 +89,40 @@
           zoom: 4,
           center: myLatLng
         });
+        infoWindow = new google.maps.InfoWindow;
 
+          // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                infoWindow.setPosition(pos);
+                infoWindow.setContent('Location found.');
+                infoWindow.open(map);
+                map.setCenter(pos);
+            }, function() {
+                handleLocationError(true, infoWindow, map.getCenter());
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+        }
+    }
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+ 
       }
 
-      var marker;
+      var marker = [];
+      var IndexMarker = 0;
 
       function DeleteMarker(user) {
           //Find and remove the marker from the Array
@@ -119,31 +149,27 @@
               anchor: new google.maps.Point(0,0), // anchor
 
           };
-          data = marker;
-        marker = new google.maps.Marker({
+    
+          marker[IndexMarker] = new google.maps.Marker({
           position: myLatLng,
           map: map,
           title: Details.UserName,
           icon: icon,
           animation: google.maps.Animation.BOUNCE,
-        
+          content: Details
         });
 
 
+          google.maps.event.addListener(marker[IndexMarker], 'click', function () {
+             debugger;
+             var a = this.content;
+          });
 
-        (function (marker, data) {
-            google.maps.event.addListener(marker, "click", function (e) {
-                debugger;
-                //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
-                infoWindow.setContent("<div style = 'width:200px;min-height:40px'>" +
-                    Details.FirstName + "<br />" + Details.lastName + "<br />" + Details.Name +
-                    "<br />" + Details.UserName + "<br />" + Details.Name + "<br />" + " <br />" +
-                    Details.Age + "<br />" + Details.Discraption +
-                    "   <input type=\"button\" value=\"PrivateChat\" /></div>");
-                infoWindow.open(map, marker);
-            });
-        })(marker, data);
+     
+        IndexMarker++;
       }
+
+
     </script>
     <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-VzC5wzLDvJKUtnTbzj4AeQ5DwF9FJ3U&callback=initMap">
