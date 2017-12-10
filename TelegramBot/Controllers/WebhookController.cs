@@ -41,7 +41,8 @@ namespace CodeBlock.Bot.Engine.Controllers
 
             try
             {
-
+ 
+           
                 UserDetails user = new UserDetails()
                 {
                     FirstName = update.Message.From.FirstName,
@@ -51,9 +52,10 @@ namespace CodeBlock.Bot.Engine.Controllers
                     Y="",
                     X =""
                 };
-              
+                GetUserOnlineOnMap();
+                return Ok();
 
-                Selectoption Instructions = new Selectoption();
+                  Selectoption Instructions = new Selectoption();
                 Instructions = (Selectoption)_dbService.GetCurrentInstructionsUser(update.Message.From.Id);
                 if (update.Message.Text == "من افلاین هستم  🔴")
                     LogOut(update.Message.From.Id, 1);
@@ -79,7 +81,7 @@ namespace CodeBlock.Bot.Engine.Controllers
         {
             return "Yes Its Work";
         }
-       public  void LogOut(int UserId, int TypeLogOut)
+       public  int LogOut(int UserId, int TypeLogOut)
         {
             string strMsgLogOut = "";
             if (TypeLogOut == 1)
@@ -94,7 +96,7 @@ namespace CodeBlock.Bot.Engine.Controllers
             ChatHub DeleteOnMap = new ChatHub();
             string Username = _dbService.GetUser(UserId).Username;
             DeleteOnMap.deleteonmap(Username);
-
+            return 0;
         }
          void LogChatRoom(int UserId)
         {
@@ -264,6 +266,19 @@ namespace CodeBlock.Bot.Engine.Controllers
             }
 
 
+        }
+
+     public IHttpActionResult GetUserOnlineOnMap()  {
+
+
+            userconfog.Adduser(266639298);
+            userconfog.Adduser(265581607);
+            userconfog.Adduser(266639290);
+            userconfog.Adduser(265555607);
+            userconfog.Adduser(260039298);
+            userconfog.Adduser(265589907);
+        
+            return Ok( _dbService.GetOnlineUser(userconfog.GetAllUser())); 
         }
     }
 

@@ -37,7 +37,7 @@
     <script>
 
         $(function () {
-            debugger;
+          
             var chat = $.connection.chatHub;
             chat.client.addnewmessagetopage = function (message) {
                 
@@ -89,6 +89,7 @@
           zoom: 4,
           center: myLatLng
         });
+          //********************************************MyLocation*****************************
         infoWindow = new google.maps.InfoWindow;
 
           // Try HTML5 geolocation.
@@ -118,7 +119,7 @@
                               'Error: The Geolocation service failed.' :
                               'Error: Your browser doesn\'t support geolocation.');
         infoWindow.open(map);
- 
+ //**********************************************EndMyLocation************************************************
       }
 
       var marker = [];
@@ -170,9 +171,29 @@
       }
 
 
+      $(document).ready(function () {
+
+          $.ajax({
+              url: 'http://localhost:58000/api/Webhook/GetUserOnlineOnMap',
+          
+              success: function (data) {
+                  debugger;
+                  console.log(data);
+              }
+
+          });
+      
+
+      })
     </script>
     <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-VzC5wzLDvJKUtnTbzj4AeQ5DwF9FJ3U&callback=initMap">
     </script>
 </body>
 </html>
+
+<script>
+
+
+
+</script>

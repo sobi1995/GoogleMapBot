@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TelegramBot.Models;
@@ -173,6 +174,18 @@ namespace GoogleMapBot.Models
 
             return _db.Member.Where(x => x.UserId == id).FirstOrDefault();
 
+        }
+        public List<UserDetails> GetOnlineUser(List<int> UserId) {
+
+            List<Member> Mems = _db.Member.Where(x => UserId.Contains(x.UserId)).ToList();
+            List<UserDetails> Usron = new List<UserDetails>();
+            Mapper.Initialize(cfg => {
+                cfg.CreateMap<Member, UserDetails>().ForMember(d => d.X, opt => opt.MapFrom(src => src.Location.X)).
+                ForMember(d => d.Y, opt => opt.MapFrom(src => src.Location.Y));
+
+            });
+            Mapper.Map( Mems, Usron);
+            return Usron;
         }
     }
 }

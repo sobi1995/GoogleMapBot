@@ -10,7 +10,7 @@ namespace TelegramBot.Models
 {
     public class UserConfog
     {
-        private int a = 0;
+        
         private Dictionary<int, int> userDic = new Dictionary<int, int>();
 
         public UserConfog()
@@ -24,7 +24,7 @@ namespace TelegramBot.Models
 
         public void Adduser(int UserId)
         {
-     //userDic.Add(UserId, 250);
+     userDic.Add(UserId, 250);
         }
 
         public void RemoveUser(int UserId)
@@ -71,6 +71,10 @@ namespace TelegramBot.Models
         public void AddTime(int UserId)
         {
             userDic[UserId] = userDic[UserId]++;
+        }
+    public    List<int> GetAllUser() {
+            return userDic.Select(x => x.Key).ToList();
+
         }
     }
 
