@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="/template/CSS/StyleIndex.css" rel="stylesheet" />
 
-     
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ 
  
 
  
@@ -27,6 +28,13 @@
             cursor: pointer;
             padding: 0;
         }
+        .centerProfileModal {
+     
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}
+}
     </style>
 </head>
 <html>
@@ -92,6 +100,39 @@
 
   <!-- Responsive Grid. Four columns on tablets, laptops and desktops. Will stack on mobile devices/small screens (100% width) -->
   
+
+
+    <div class="w3-container">
+        <h2>W3.CSS Login Modal</h2>
+        <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-green w3-large">Login</button>
+
+        <div id="id01" class="w3-modal">
+            <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+                <div class="w3-center">
+                    <br>
+                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+                    <img src="img_avatar4.png" alt="Avatar" style="width:30%"  id="Avatar" class="w3-circle w3-margin-top">
+                </div>
+                <div class="centerProfileModal">
+                    <label id="FirstName"></label>
+                    <br />
+                    <label id="LastName"></label>
+                    <br />
+                    <label id="UserName"></label>
+                  
+                </div>
+                <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+                    <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
 
  
 </div>
@@ -161,7 +202,7 @@
   <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
 </footer>
  
-
+  
  
  
 
@@ -294,8 +335,14 @@
        
 
           google.maps.event.addListener(marker[IndexMarker], 'click', function () {
-             debugger;
-             var a = this.content;
+              document.getElementById('id01').style.display = 'block';
+              debugger;
+              var a = "http://localhost:58000/ImgProfiles/Profile" + this.content.Username + ".jpg";
+              $("#Avatar").attr('src', "http://localhost:58000/ImgProfiles/Profile" + this.content.UserId + ".jpg");
+              $("#FirstName").html(this.content.FirstName);
+              
+              $("#LastName").html(this.content.LastName);
+              $("#UserName").html(this.content.Username);
           });
 
 
