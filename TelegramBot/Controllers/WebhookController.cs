@@ -34,27 +34,27 @@ namespace CodeBlock.Bot.Engine.Controllers
             bot = new Api("438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A");
             _dbService = new dbService();
         }
-    
+
         [HttpPost]
         public async Task<IHttpActionResult> UpdateMsg(Update update)
         {
 
             try
             {
- 
-           
+
+
                 UserDetails user = new UserDetails()
                 {
                     FirstName = update.Message.From.FirstName,
                     LastName = update.Message.From.LastName,
                     UserId = update.Message.From.Id,
                     Username = update.Message.From.Username,
-                    Y="",
-                    X =""
+                    Y = "",
+                    X = ""
                 };
-           
 
-                  Selectoption Instructions = new Selectoption();
+
+                Selectoption Instructions = new Selectoption();
                 Instructions = (Selectoption)_dbService.GetCurrentInstructionsUser(update.Message.From.Id);
                 if (update.Message.Text == "من افلاین هستم  🔴")
                     LogOut(update.Message.From.Id, 1);
@@ -73,31 +73,34 @@ namespace CodeBlock.Bot.Engine.Controllers
             }
             return Ok(update);
         }
+        [HttpPost]
+
         /// <summary>
         /// یک متد برای تست وب سرویس
         /// </summary>
-         string Get()
+        string Get()
         {
             return "Yes Its Work";
         }
-       public  int LogOut(int UserId, int TypeLogOut)
+        public IHttpActionResult LogOut(int UserId, int TypeLogOut)
         {
             string strMsgLogOut = "";
             if (TypeLogOut == 1)
                 strMsgLogOut = " شما م اکنور به حالت افلاین رفتید در صورت تمایل بر رویع من انلاین هسان کلیک کنید";
             else
                 strMsgLogOut = " ب دلیل استفاده  نکردن مداوم از بات   شما به حالت تعویق  در امدید در صورت تمایل بر رویع من انلاین هستم کلیک کنید ";
-         
+
             LogChatRoom(UserId);
             SendMesgOnChatRoom(new UserDetails() { FirstName = "Bot  : ", UserId = UserId }, _dbService.GetFirstnameId(UserId) + "❌  از بات روم خارج شد");
             Sendmsg(UserId, strMsgLogOut, new List<string> { "🔵%  من  انلاین هستم" });
             _dbService.SetCurrentInstructionsUser(UserId, Selectoption.ImOnline);
+            userconfog.RemoveUser(UserId);
             ChatHub DeleteOnMap = new ChatHub();
             string Username = _dbService.GetUser(UserId).Username;
             DeleteOnMap.deleteonmap(Username);
-            return 0;
+            return Ok(0);
         }
-         void LogChatRoom(int UserId)
+        void LogChatRoom(int UserId)
         {
             _dbService.LogOutChatRoom(UserId);
         }
@@ -157,20 +160,19 @@ namespace CodeBlock.Bot.Engine.Controllers
         }
         void Sendmsg(int UserId, string Msg, List<string> Buuton)
         {
-
-
             if (_dbService.GetCurrentInstructionsUser(UserId) != Selectoption.ImOnline) Buuton.Add("من افلاین هستم  🔴");
-            var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(Buuton.ToArray(), 2, 2, null));
-            dynamicKeyBord.ResizeKeyboard = true;
-            bot.SendTextMessage(UserId, text: Msg, replyMarkup: dynamicKeyBord);
-
-
-
+                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(Buuton.ToArray(), 2, 2, null));
+                dynamicKeyBord.ResizeKeyboard = true; bot.SendTextMessage(UserId, text: Msg, replyMarkup: dynamicKeyBord);
+        }
+        void Sendmsg(int UserId, string Msg)
+        {
+         
+           bot.SendTextMessage(UserId, text: Msg);
         }
         void Updatelocation(TelegramBot.Models.LocationM Location, UserDetails user)
         {
-         
-          
+
+
             _dbService.UpdateLocation(Location, user.UserId);
             userconfog.Adduser(user.UserId);
             _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.Mnu);
@@ -181,9 +183,10 @@ namespace CodeBlock.Bot.Engine.Controllers
             SendLocationOnGoogleMap(user);
 
         }
-        void SendLocationOnGoogleMap(UserDetails user) {
+        void SendLocationOnGoogleMap(UserDetails user)
+        {
             ChatHub WebSocket = new ChatHub();
-          WebSocket.SendPhotoOnMap(user);
+            WebSocket.SendPhotoOnMap(user);
 
         }
         void back(int UserId, string Msg)
@@ -256,21 +259,32 @@ namespace CodeBlock.Bot.Engine.Controllers
         async void SendPhoto(int userid, string url)
         {
             string FilePatch = System.Web.Hosting.HostingEnvironment.MapPath(url);
-               using (var stream = System.IO.File.Open(FilePatch, FileMode.Open))
+            using (var stream = System.IO.File.Open(FilePatch, FileMode.Open))
             {
                 FileToSend fts = new FileToSend();
                 fts.Content = stream;
                 fts.Filename = FilePatch.Split('\\').Last();
-               await bot.SendPhoto(userid, fts, "My Text");
+                await bot.SendPhoto(userid, fts, "My Text");
             }
 
 
         }
 
-     public IHttpActionResult GetUserOnlineOnMap()  {
+        public IHttpActionResult GetUserOnlineOnMap()
+        {
             if (userconfog.GetCount() <= 0)
                 return Ok(0);
-            return Ok( _dbService.GetOnlineUser(userconfog.GetAllUser())); 
+            return Ok(_dbService.GetOnlineUser(userconfog.GetAllUser()));
+        }
+        [HttpPost]
+         
+        public IHttpActionResult UserCommants(string   Name,string Phone,string Msg)
+        {
+            _dbService.SetCommants(new Commants() {Msg=Msg,Name=Name,Phone=Phone });
+        Sendmsg(266639298, Name + "  " + Phone + "  \n \n" + Msg, null);
+
+            return Ok("0");
+
         }
     }
 

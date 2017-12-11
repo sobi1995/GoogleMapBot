@@ -7,7 +7,8 @@ namespace GoogleMapBot.Models
     {
         public DbSet<Member> Member { get; set; }
         public DbSet<ChatRoom> ChatRoom { get; set; }
-        //ChatRoom
+        public DbSet<Commants> Commants { get; set; }
+        //Commants
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

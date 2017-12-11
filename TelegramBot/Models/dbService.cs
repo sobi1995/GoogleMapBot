@@ -183,5 +183,14 @@ namespace GoogleMapBot.Models
             Mapper.Map( Mems, Usron);
             return Usron;
         }
+        public void SetCommants(Commants commants) {
+
+
+            _db.Commants.Add(commants);
+            _db.SaveChanges();
+
+
+
+        }
     }
 }

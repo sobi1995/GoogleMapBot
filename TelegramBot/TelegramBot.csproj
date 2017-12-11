@@ -177,7 +177,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="goooglemap.html" />
     <Content Include="Help\JavaScript.js" />
     <Content Include="Help\TextFile1.txt" />
     <Content Include="Chat.html" />
@@ -201,6 +200,19 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Index.html" />
+    <Content Include="template\CSS\StyleIndex.css" />
+    <Content Include="template\img\download.jpg" />
+    <Content Include="template\img\images %281%29.jpg" />
+    <Content Include="template\img\images %282%29.jpg" />
+    <Content Include="template\img\images %283%29.jpg" />
+    <Content Include="template\img\images %284%29.jpg" />
+    <Content Include="template\img\images %285%29.jpg" />
+    <Content Include="template\img\images %286%29.jpg" />
+    <Content Include="template\img\images %287%29.jpg" />
+    <Content Include="template\img\images.jpg" />
+    <Content Include="template\img\photo_2017-12-11_06-46-42.jpg" />
+    <Content Include="template\Js\JsPageDefulte.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -216,6 +228,7 @@
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ChatRoom.cs" />
+    <Compile Include="Models\Commants.cs" />
     <Compile Include="Models\GeneralFunactions.cs" />
     <Compile Include="Models\GoogleMapAlgorithm.cs" />
     <Compile Include="Models\Context.cs" />

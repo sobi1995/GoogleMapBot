@@ -24,7 +24,7 @@ namespace TelegramBot.Models
 
         public void Adduser(int UserId)
         {
-     userDic.Add(UserId, 250);
+     userDic.Add(UserId, 120);
         }
 
         public void RemoveUser(int UserId)
@@ -53,7 +53,7 @@ namespace TelegramBot.Models
                         if (userDic[item.Key] <= 0)
                         {
                             WebhookController d = new WebhookController();
-                               d.LogOut(Key,0);
+                           d.LogOut(Key,0);
                           
                           
 
