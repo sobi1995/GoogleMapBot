@@ -220,6 +220,7 @@
     <Compile Include="Models\GoogleMapAlgorithm.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\dbService.cs" />
+    <Compile Include="Models\MaperConfig.cs" />
     <Compile Include="Models\Selectoption.cs" />
     <Compile Include="Models\UserConfog.cs" />
     <Compile Include="Models\UserDetails.cs" />

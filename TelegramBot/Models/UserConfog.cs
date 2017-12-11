@@ -72,10 +72,15 @@ namespace TelegramBot.Models
         {
             userDic[UserId] = userDic[UserId]++;
         }
-    public    List<int> GetAllUser() {
+       public    List<int> GetAllUser() {
+            var a= userDic.Select(x => x.Key).ToList();
             return userDic.Select(x => x.Key).ToList();
 
         }
+        public int GetCount() {
+
+            return userDic.Count;
+                }
     }
 
     public sealed class Singleton

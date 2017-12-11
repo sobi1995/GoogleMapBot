@@ -177,8 +177,12 @@
               url: 'http://localhost:58000/api/Webhook/GetUserOnlineOnMap',
           
               success: function (data) {
-                  debugger;
-                  console.log(data);
+                  if (data == 0) return;
+                  $.each(data, function (k, v) {
+                      debugger;
+                      addMarker(v);
+                  });
+                 
               }
 
           });

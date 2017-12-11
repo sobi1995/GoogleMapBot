@@ -52,8 +52,7 @@ namespace CodeBlock.Bot.Engine.Controllers
                     Y="",
                     X =""
                 };
-                GetUserOnlineOnMap();
-                return Ok();
+           
 
                   Selectoption Instructions = new Selectoption();
                 Instructions = (Selectoption)_dbService.GetCurrentInstructionsUser(update.Message.From.Id);
@@ -269,15 +268,8 @@ namespace CodeBlock.Bot.Engine.Controllers
         }
 
      public IHttpActionResult GetUserOnlineOnMap()  {
-
-
-            userconfog.Adduser(266639298);
-            userconfog.Adduser(265581607);
-            userconfog.Adduser(266639290);
-            userconfog.Adduser(265555607);
-            userconfog.Adduser(260039298);
-            userconfog.Adduser(265589907);
-        
+            if (userconfog.GetCount() <= 0)
+                return Ok(0);
             return Ok( _dbService.GetOnlineUser(userconfog.GetAllUser())); 
         }
     }
