@@ -24,7 +24,7 @@ namespace TelegramBot.Models
 
         public void Adduser(int UserId)
         {
-     userDic.Add(UserId, 120);
+     userDic.Add(UserId, 200);
         }
 
         public void RemoveUser(int UserId)
@@ -70,9 +70,9 @@ namespace TelegramBot.Models
 
         public void AddTime(int UserId)
         {
-            userDic[UserId] = userDic[UserId]++;
+            userDic[UserId] = userDic[UserId]5;
         }
-       public    List<int> GetAllUser() {
+       public List<int> GetAllUser() {
             var a= userDic.Select(x => x.Key).ToList();
             return userDic.Select(x => x.Key).ToList();
 

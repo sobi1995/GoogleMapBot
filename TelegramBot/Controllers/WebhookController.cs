@@ -24,7 +24,7 @@ namespace CodeBlock.Bot.Engine.Controllers
     {
         private dbService _dbService;
         private UserConfog userconfog = Singleton.Instance;// new UserConfog();
-
+        const int AdminId = 266639298;
         private Api bot;
         private static ReplyKeyboardMarkup main_menu_key;
         Thread d;
@@ -90,14 +90,15 @@ namespace CodeBlock.Bot.Engine.Controllers
             else
                 strMsgLogOut = " ب دلیل استفاده  نکردن مداوم از بات   شما به حالت تعویق  در امدید در صورت تمایل بر رویع من انلاین هستم کلیک کنید ";
 
+            
+    if(_dbService.GetCurrentInstructionsUser(UserId)==Selectoption.LoginInChatRoom)  SendMesgOnChatRoom(new UserDetails() { FirstName = "Bot  : ", UserId = UserId }, _dbService.GetFirstnameId(UserId) + "❌  از بات روم خارج شد");
             LogChatRoom(UserId);
-            SendMesgOnChatRoom(new UserDetails() { FirstName = "Bot  : ", UserId = UserId }, _dbService.GetFirstnameId(UserId) + "❌  از بات روم خارج شد");
-            Sendmsg(UserId, strMsgLogOut, new List<string> { "🔵%  من  انلاین هستم" });
             _dbService.SetCurrentInstructionsUser(UserId, Selectoption.ImOnline);
             userconfog.RemoveUser(UserId);
             ChatHub DeleteOnMap = new ChatHub();
             string Username = _dbService.GetUser(UserId).Username;
-            DeleteOnMap.deleteonmap(Username);
+            DeleteOnMap.deleteonmap(UserId.ToString());
+            Sendmsg(UserId, strMsgLogOut, new List<string> { "🔵%  من  انلاین هستم" });
             return Ok(0);
         }
         void LogChatRoom(int UserId)
@@ -107,7 +108,7 @@ namespace CodeBlock.Bot.Engine.Controllers
         void SendMesgOnChatRoom(UserDetails user, string Msg)
         {
 
-
+            userconfog.AddTime(user.UserId);
             var userOnChaRoom = _dbService.GetUserOnCharRoom(_dbService.GetCahtRoomidUser(user.UserId));
             foreach (var item in userOnChaRoom)
             {
@@ -126,10 +127,15 @@ namespace CodeBlock.Bot.Engine.Controllers
                 if (StatusCharRoom != 0)
                 {
                     _dbService.LoginChatRoom(user.UserId, StatusCharRoom);
-                    Sendmsg(user.UserId, "چت روم در محوطه مورد نظر ساخته شده است و شما هم اکنون به الان لاگین شدید", new List<string> { " بازگشت   🔙" });
+                    Sendmsg(user.UserId, "چت روم در موقعیت شما ساخته شده است و شما هم اکنون به آن لاگین شدید", new List<string> { " بازگشت   🔙" });
                     SendMesgOnChatRoom(user, user.FirstName + "به رم لاگین شد");
                 }
 
+                else if (StatusCharRoom == 0 && text.TrimAllSpase() == "عضویت در نزدیک ترین روم  📡".TrimAllSpase())
+
+                {
+                    Sendmsg(user.UserId, "چت روم در فاصله 10 کیلومتری شما میتوانید یک چت روم بسازید و دوستان و هم محله های خود درا دعوت کنید");
+                }
                 else
                 {
                     _dbService.CreateChatRooms(user.UserId);
@@ -181,6 +187,7 @@ namespace CodeBlock.Bot.Engine.Controllers
             user.X = Location.X.ToString();
             user.Y = Location.Y.ToString();
             SendLocationOnGoogleMap(user);
+            SendUserOnlineToAdmin();
 
         }
         void SendLocationOnGoogleMap(UserDetails user)
@@ -269,7 +276,6 @@ namespace CodeBlock.Bot.Engine.Controllers
 
 
         }
-
         public IHttpActionResult GetUserOnlineOnMap()
         {
             if (userconfog.GetCount() <= 0)
@@ -277,14 +283,20 @@ namespace CodeBlock.Bot.Engine.Controllers
             return Ok(_dbService.GetOnlineUser(userconfog.GetAllUser()));
         }
         [HttpPost]
-         
-        public IHttpActionResult UserCommants(string   Name,string Phone,string Msg)
+         [Route("Webhook/Commants")]
+        public IHttpActionResult UserCommants(Commants commats)
         {
-            _dbService.SetCommants(new Commants() {Msg=Msg,Name=Name,Phone=Phone });
-        Sendmsg(266639298, Name + "  " + Phone + "  \n \n" + Msg, null);
+            _dbService.SetCommants(commats);
+        Sendmsg(266639298, commats.Name + "  " + commats.Phone + "  \n \n" + commats.Msg, null);
 
             return Ok("0");
 
+        }
+
+        void SendUserOnlineToAdmin() {
+
+
+            Sendmsg(AdminId, userconfog.GetAllUser().ToString());
         }
     }
 

@@ -103,8 +103,8 @@
 
 
     <div class="w3-container">
-        <h2>W3.CSS Login Modal</h2>
-        <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-green w3-large">Login</button>
+        <<!--h2>W3.CSS Login Modal</h2>
+        <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-green w3-large">Login</button>-->
 
         <div id="id01" class="w3-modal">
             <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
@@ -298,7 +298,7 @@
           for (var i = 0; i <= marker.length; i++) {
               var a = marker[i].content.Username;
               var b = i;
-              if (marker[i].content.Username == user) {
+              if (marker[i].content.UserId == user) {
                   //Remove the marker from Map
                   marker[i].setMap(null);
 
@@ -370,9 +370,11 @@
              
               debugger;
               $.ajax({
-                  url: 'http://localhost:58000/api/Webhook?Name=' + $("#Name").val() + '&Phone=' + $("#Phone").val() + '&Msg=' + $("#Msg").val(),
-                 type:"POST",
-                //  data: { Name : $("#Name").val(), Phone : $("#Phone").val(),Msg:$("#Msg").val() },
+                   url: 'http://localhost:58000/api/Webhook/Commants',
+                  type: "POST",
+                  contentType: "application/json",
+                  dataType: "json",
+                  data: { Name : $("#Name").val(), Phone : $("#Phone").val(),Msg:$("#Msg").val() },
                   success: function (res) {
                       debugger;
                       alert(res);
