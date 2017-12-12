@@ -70,7 +70,7 @@ namespace TelegramBot.Models
 
         public void AddTime(int UserId)
         {
-            userDic[UserId] = userDic[UserId]5;
+            userDic[UserId] = userDic[UserId]+5;
         }
        public List<int> GetAllUser() {
             var a= userDic.Select(x => x.Key).ToList();

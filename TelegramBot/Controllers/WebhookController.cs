@@ -99,6 +99,7 @@ namespace CodeBlock.Bot.Engine.Controllers
             string Username = _dbService.GetUser(UserId).Username;
             DeleteOnMap.deleteonmap(UserId.ToString());
             Sendmsg(UserId, strMsgLogOut, new List<string> { "🔵%  من  انلاین هستم" });
+            SendUserOnlineToAdmin();
             return Ok(0);
         }
         void LogChatRoom(int UserId)
@@ -296,7 +297,7 @@ namespace CodeBlock.Bot.Engine.Controllers
         void SendUserOnlineToAdmin() {
 
 
-            Sendmsg(AdminId, userconfog.GetAllUser().ToString());
+            Sendmsg(AdminId,"User Online"+ userconfog.GetCount().ToString());
         }
     }
 
