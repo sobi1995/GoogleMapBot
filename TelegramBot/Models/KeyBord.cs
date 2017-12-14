@@ -90,8 +90,8 @@ namespace GoogleMapBot.Models
             return keyboardInline;
         }
 
-        public static List<string> Menu = new List<string>() { "👥   ساخت چت روم   👥 ", "عضویت در نزدیک ترین روم  📡", "📋    لیست روم ها    📋", "ورد به سایت", "رهنمایی", "درباره ما" };
-        public static List<string> Profile = new List<string>() { "نام", "سن", "Bio" };
+        public static List<string> Menu = new List<string>() { "👥   ساخت چت روم   👥 ", "عضویت در نزدیک ترین روم  📡","نظرات و پیشنهادات", "ورد به سایت", "رهنمایی", "درباره بات" };
+
     }
 
      

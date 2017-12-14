@@ -124,15 +124,15 @@ namespace CodeBlock.Bot.Engine.Controllers
             if (text.TrimAllSpase() == "👥ساخت چت روم👥".TrimAllSpase()
             || text.TrimAllSpase() == "عضویت در نزدیک ترین روم  📡".TrimAllSpase())
             {
-                int StatusCharRoom = _dbService.SearchByNeartsRoom(user.UserId);
-                if (StatusCharRoom != 0)
+                int IdRoom = _dbService.SearchByNeartsRoom(user.UserId);
+                if (IdRoom != 0)
                 {
-                    _dbService.LoginChatRoom(user.UserId, StatusCharRoom);
-                    Sendmsg(user.UserId, "چت روم در موقعیت شما ساخته شده است و شما هم اکنون به آن لاگین شدید", new List<string> { " بازگشت   🔙" });
+                    _dbService.LoginChatRoom(user.UserId, IdRoom);
+                    Sendmsg(user.UserId, "چت روم در موقعیت شما ساخته شده است و شما هم اکنون به آن لاگین شدید\n تعداد افراد انلابن در روم " + _dbService.UserOnChatRoom(IdRoom).ToString(), new List<string> { " بازگشت   🔙" });
                     SendMesgOnChatRoom(user, user.FirstName + "به رم لاگین شد");
                 }
 
-                else if (StatusCharRoom == 0 && text.TrimAllSpase() == "عضویت در نزدیک ترین روم  📡".TrimAllSpase())
+                else if (IdRoom == 0 && text.TrimAllSpase() == "عضویت در نزدیک ترین روم  📡".TrimAllSpase())
 
                 {
                     Sendmsg(user.UserId, "چت روم در فاصله 10 کیلومتری شما میتوانید یک چت روم بسازید و دوستان و هم محله های خود درا دعوت کنید");
@@ -171,6 +171,12 @@ namespace CodeBlock.Bot.Engine.Controllers
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(Buuton.ToArray(), 2, 2, null));
                 dynamicKeyBord.ResizeKeyboard = true; bot.SendTextMessage(UserId, text: Msg, replyMarkup: dynamicKeyBord);
         }
+        void Sendmsg(int UserId, string Msg, List<string> Buuton,int ColRow,int Type)
+        {
+            if (_dbService.GetCurrentInstructionsUser(UserId) != Selectoption.ImOnline) Buuton.Add("من افلاین هستم  🔴");
+            var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(Buuton.ToArray(), ColRow, Type, null));
+            dynamicKeyBord.ResizeKeyboard = true; bot.SendTextMessage(UserId, text: Msg, replyMarkup: dynamicKeyBord);
+        }
         void Sendmsg(int UserId, string Msg)
         {
          
@@ -178,8 +184,11 @@ namespace CodeBlock.Bot.Engine.Controllers
         }
         void Updatelocation(TelegramBot.Models.LocationM Location, UserDetails user)
         {
-
-
+            if (user.UserId == 481130486)
+            {
+                Location.X = 35.725704193115234;
+                Location.Y = 51.422340393066406;
+            }
             _dbService.UpdateLocation(Location, user.UserId);
             userconfog.Adduser(user.UserId);
             _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.Mnu);
@@ -288,7 +297,7 @@ namespace CodeBlock.Bot.Engine.Controllers
         public IHttpActionResult UserCommants(Commants commats)
         {
             _dbService.SetCommants(commats);
-        Sendmsg(266639298, commats.Name + "  " + commats.Phone + "  \n \n" + commats.Msg, null);
+        Sendmsg(266639298, commats.Name + "  " + commats.Phone + "  \n \n" + commats.Msg);
 
             return Ok("0");
 

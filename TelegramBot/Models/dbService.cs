@@ -192,5 +192,11 @@ namespace GoogleMapBot.Models
 
 
         }
+
+        public int UserOnChatRoom(int IdRoom) {
+   
+            return _db.Member.Where(x => x.ChatRoomId == IdRoom).Count();
+
+        }
     }
 }

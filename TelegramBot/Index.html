@@ -70,7 +70,8 @@
 <!-- First Parallax Image with Logo Text -->
 <div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
   <div class="w3-display-middle" style="white-space:nowrap;">
-    <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">MY <span class="w3-hide-small">WEBSITE</span> LOGO</span>
+    <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">
+      به نام یگانه <span class="w3-hide-small">برنامه نویس</span> هستی</span>
   </div>
 </div>
 
@@ -210,7 +211,7 @@
     <script>
 
         $(function () {
-            debugger;
+           
             var chat = $.connection.chatHub;
             chat.client.addnewmessagetopage = function (message) {
 
@@ -221,7 +222,7 @@
 
 
             chat.client.DeleteOnMap = function (message) {
-                debugger;
+               
                 DeleteMarker(message);
 
             };
@@ -310,7 +311,7 @@
           }
       };
       function addMarker(Details) {
-          debugger;
+ 
           let x = Details.X.replace("/", ".");
           let y = Details.Y.replace("/", ".");
           var infoWindow = new google.maps.InfoWindow();
@@ -336,7 +337,7 @@
 
           google.maps.event.addListener(marker[IndexMarker], 'click', function () {
               document.getElementById('id01').style.display = 'block';
-              debugger;
+         
               var a = "http://localhost:58000/ImgProfiles/Profile" + this.content.Username + ".jpg";
               $("#Avatar").attr('src', "http://localhost:58000/ImgProfiles/Profile" + this.content.UserId + ".jpg");
               $("#FirstName").html(this.content.FirstName);
@@ -368,15 +369,15 @@
 
           $("#SendMsg").click(function () {
              
-              debugger;
+              var datacommants={ Name: $("#Name").val(), Phone: $("#Phone").val(), Msg: $("#Msg").val(),id:0 };
               $.ajax({
-                   url: 'http://localhost:58000/api/Webhook/Commants',
+                  url: 'http://localhost:58000/Webhook/Commants',
                   type: "POST",
                   contentType: "application/json",
                   dataType: "json",
-                  data: { Name : $("#Name").val(), Phone : $("#Phone").val(),Msg:$("#Msg").val() },
+                  data: JSON.stringify(datacommants),
                   success: function (res) {
-                      debugger;
+         
                       alert(res);
                       alert("پیام شما ارسال شد  \n    با  تشکر از شما");
                      
@@ -386,7 +387,7 @@
                       
                   },
                   error: function (ex) {
-                      debugger;
+                
                       alert(ex);
                   }
 
