@@ -1,4 +1,5 @@
-﻿using TelegramBot.Models;
+﻿using System.Collections.Generic;
+using TelegramBot.Models;
 
 namespace GoogleMapBot.Models
 {
@@ -6,12 +7,15 @@ namespace GoogleMapBot.Models
 
     {
         public int id { get; set; }
-        public byte Role { get; set; }
-        public LocationM Location { get; set; }
+     
+      //  public LocationM Location { get; set; }
         public virtual ChatRoom ChatRoom { get; set; }
         public int? ChatRoomId { get; set; }
         public string Adrress { get; set; }
         public Selectoption Instructions { get; set; }
+        public virtual List<HistoryChating> HistoryChating { get; set; }
+
+
         public Member(int UserId, string FirstName, string lastName, string UserName)
         {
             this.UserId = UserId;
@@ -19,6 +23,9 @@ namespace GoogleMapBot.Models
             this.LastName = lastName;
             this.Username = UserName;
             ChatRoomId = 0;
+            X = 0;
+           
+            Y = 0;
         }
 
         public Member()

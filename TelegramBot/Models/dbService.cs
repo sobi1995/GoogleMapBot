@@ -25,8 +25,9 @@ namespace GoogleMapBot.Models
                         FirstName = Ueser.FirstName,
                         Username = Ueser.Username,
                         LastName = Ueser.LastName,
-                        Role = 0,
-                        Location = new LocationM() { X = 0, Y = 0 },
+             
+                     X=0,
+                     Y=0,
                         Instructions = 0
                     };
                     _db.Member.Add(StrtUser);
@@ -50,7 +51,7 @@ namespace GoogleMapBot.Models
 
             Member usercreatechatRoom = _db.Member.Where(x => x.UserId == Userid).FirstOrDefault();
 
-            _db.ChatRoom.Add(new ChatRoom() { Location = usercreatechatRoom.Location, Discraption = "asdas" });
+            _db.ChatRoom.Add(new ChatRoom() { Location =new LocationM() {X= usercreatechatRoom.X,Y= usercreatechatRoom.Y }, Discraption = "asdas" });
             _db.SaveChanges();
             return 1;
 
@@ -84,7 +85,9 @@ namespace GoogleMapBot.Models
             Decimal Longitude = Convert.ToDecimal(s2);
 
             var userIdUbdatelocation = _db.Member.Where(x => x.UserId == UserId).FirstOrDefault();
-            userIdUbdatelocation.Location = new LocationM() { X = Location.X.LocationDecimals(), Y = Location.Y.LocationDecimals() };
+            //userIdUbdatelocation.Location = new LocationM() { X = Location.X.LocationDecimals(), Y = Location.Y.LocationDecimals() };
+            userIdUbdatelocation.X = Location.X;
+            userIdUbdatelocation.Y = Location.Y;
             userIdUbdatelocation.Adrress = GeoCodeCalc.GetAddressFromLatLon(Latitude, Longitude);
             _db.SaveChanges();
             SetCurrentInstructionsUser(UserId, Selectoption.Mnu);
@@ -109,7 +112,7 @@ namespace GoogleMapBot.Models
 
             foreach (var item in ChatRooms)
             {
-                int Distanes = (int)Math.Round(GeoCodeCalc.CalcDistance(user.Location, item.Location, GeoCodeCalcMeasurement.Kilometers));
+                int Distanes = (int)Math.Round(GeoCodeCalc.CalcDistance(new LocationM() {X=user.X,Y=user.Y }, item.Location, GeoCodeCalcMeasurement.Kilometers));
 
                 if (Distanes <= 10 && Distanes >= 0)
                 {
@@ -196,6 +199,13 @@ namespace GoogleMapBot.Models
         public int UserOnChatRoom(int IdRoom) {
    
             return _db.Member.Where(x => x.ChatRoomId == IdRoom).Count();
+
+        }
+
+        public void SaveChat(int UserId, string Msg) {
+
+            _db.HistoryChating.Add(new HistoryChating() { MemberId = UserId, Msg = Msg });
+            _db.SaveChanges();
 
         }
     }

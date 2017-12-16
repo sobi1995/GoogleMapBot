@@ -311,9 +311,9 @@
           }
       };
       function addMarker(Details) {
- 
-          let x = Details.X.replace("/", ".");
-          let y = Details.Y.replace("/", ".");
+          debugger;
+          let x = Details.X
+          let y = Details.Y
           var infoWindow = new google.maps.InfoWindow();
           var myLatLng = { lat: parseFloat(x), lng: parseFloat(y) };
           var icon = {

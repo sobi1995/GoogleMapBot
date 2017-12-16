@@ -180,7 +180,9 @@
     <Content Include="Help\JavaScript.js" />
     <Content Include="Help\TextFile1.txt" />
     <Content Include="Chat.html" />
+    <Content Include="ImgProfiles\photo_۲۰۱۷-۰۹-۱۹_۰۵-۱۰-۳۸ %282%29.jpg" />
     <Content Include="ImgProfiles\Profile266639298.jpg" />
+    <Content Include="ImgProfiles\Untitled-1.gif" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="packages.config" />
@@ -233,6 +235,7 @@
     <Compile Include="Models\GoogleMapAlgorithm.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\dbService.cs" />
+    <Compile Include="Models\HistoryChating.cs" />
     <Compile Include="Models\MaperConfig.cs" />
     <Compile Include="Models\Selectoption.cs" />
     <Compile Include="Models\UserConfog.cs" />

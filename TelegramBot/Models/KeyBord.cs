@@ -7,9 +7,9 @@ using Telegram.Bot.Types;
 
 namespace GoogleMapBot.Models
 {
-    static public class KeyBord
+      public class KeyBord
     {
-        static public KeyboardButton[][] GetReplyKeyboardMarkup(string[] stringArray, int ColInRow,
+          public KeyboardButton[][] GetReplyKeyboardMarkup(string[] stringArray, int ColInRow,
            int btnType, KeyboardButton[] extrabtn)
         {
             int col = ColInRow;
@@ -54,7 +54,7 @@ namespace GoogleMapBot.Models
             return keyboardInline;
         }
 
-        static public InlineKeyboardButton[][] GetInlineKeyboard(string[] stringArray, string[] stringValue, int ColInRow,
+          public InlineKeyboardButton[][] GetInlineKeyboard(string[] stringArray, string[] stringValue, int ColInRow,
             int btnType, InlineKeyboardButton[] extrabtn, string Link = "")
         {
             //btnType ==> 1: URL  2:CallBack
@@ -90,7 +90,7 @@ namespace GoogleMapBot.Models
             return keyboardInline;
         }
 
-        public static List<string> Menu = new List<string>() { "👥   ساخت چت روم   👥 ", "عضویت در نزدیک ترین روم  📡","نظرات و پیشنهادات", "ورد به سایت", "رهنمایی", "درباره بات" };
+        public   List<string> Menu = new List<string>() { "👥   ساخت چت روم   👥 ", "عضویت در نزدیک ترین روم  📡","نظرات و پیشنهادات", "ورد به سایت", "رهنمایی", "درباره بات" };
 
     }
 

@@ -49,8 +49,8 @@ namespace CodeBlock.Bot.Engine.Controllers
                     LastName = update.Message.From.LastName,
                     UserId = update.Message.From.Id,
                     Username = update.Message.From.Username,
-                    Y = "",
-                    X = ""
+                    Y = 0,
+                    X = 0,
                 };
 
 
@@ -58,6 +58,8 @@ namespace CodeBlock.Bot.Engine.Controllers
                 Instructions = (Selectoption)_dbService.GetCurrentInstructionsUser(update.Message.From.Id);
                 if (update.Message.Text == "من افلاین هستم  🔴")
                     LogOut(update.Message.From.Id, 1);
+                else if (update.Message.Text != null && update.Message.Text.TrimAllSpase() == "بازگشت   🔙".TrimAllSpase())
+                    back(user.UserId);
                 else if (Instructions == Selectoption.LoginInChatRoom)
                     SendMesgOnChatRoom(user, update.Message.Text);
                 else if (Instructions == Selectoption.Start)
@@ -116,7 +118,7 @@ namespace CodeBlock.Bot.Engine.Controllers
                 if (item == user.UserId) continue;
                 bot.SendTextMessage(item, user.FirstName + " : " + Msg);
             }
-
+            _dbService.SaveChat(user.UserId, Msg);
 
         }
         void Mnu(string text, UserDetails user)
@@ -128,20 +130,21 @@ namespace CodeBlock.Bot.Engine.Controllers
                 if (IdRoom != 0)
                 {
                     _dbService.LoginChatRoom(user.UserId, IdRoom);
-                    Sendmsg(user.UserId, "چت روم در موقعیت شما ساخته شده است و شما هم اکنون به آن لاگین شدید\n تعداد افراد انلابن در روم " + _dbService.UserOnChatRoom(IdRoom).ToString(), new List<string> { " بازگشت   🔙" });
+                    Sendmsg(user.UserId, "چت روم در موقعیت شما ساخته شده است و شما هم اکنون به آن لاگین شدید\n تعداد افراد انلابن در روم " + _dbService.UserOnChatRoom(IdRoom).ToString(), new List<string> { " بازگشت   🔙" }, 1, 1);
                     SendMesgOnChatRoom(user, user.FirstName + "به رم لاگین شد");
                 }
 
                 else if (IdRoom == 0 && text.TrimAllSpase() == "عضویت در نزدیک ترین روم  📡".TrimAllSpase())
 
                 {
+               
                     Sendmsg(user.UserId, "چت روم در فاصله 10 کیلومتری شما میتوانید یک چت روم بسازید و دوستان و هم محله های خود درا دعوت کنید");
                 }
                 else
                 {
                     _dbService.CreateChatRooms(user.UserId);
                     _dbService.LoginChatRoom(user.UserId, _dbService.SearchByNeartsRoom(user.UserId));
-                    Sendmsg(user.UserId, "چت روم با موفقیت ساحته شد و افرد میتوانند در صورت جست وجو نزدریک ترین چت روم در ان عضو شودند", new List<string> { " بازگشت   🔙" });
+                    Sendmsg(user.UserId, "چت روم با موفقیت ساحته شد و افرد میتوانند در صورت جست وجو نزدریک ترین چت روم در ان عضو شودند", new List<string> { " بازگشت   🔙" }, 1, 1);
                 }
                 _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.LoginInChatRoom);
             }
@@ -167,12 +170,14 @@ namespace CodeBlock.Bot.Engine.Controllers
         }
         void Sendmsg(int UserId, string Msg, List<string> Buuton)
         {
+            KeyBord KeyBord=new KeyBord();
             if (_dbService.GetCurrentInstructionsUser(UserId) != Selectoption.ImOnline) Buuton.Add("من افلاین هستم  🔴");
                 var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(Buuton.ToArray(), 2, 2, null));
                 dynamicKeyBord.ResizeKeyboard = true; bot.SendTextMessage(UserId, text: Msg, replyMarkup: dynamicKeyBord);
         }
         void Sendmsg(int UserId, string Msg, List<string> Buuton,int ColRow,int Type)
         {
+            KeyBord KeyBord = new KeyBord();
             if (_dbService.GetCurrentInstructionsUser(UserId) != Selectoption.ImOnline) Buuton.Add("من افلاین هستم  🔴");
             var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(Buuton.ToArray(), ColRow, Type, null));
             dynamicKeyBord.ResizeKeyboard = true; bot.SendTextMessage(UserId, text: Msg, replyMarkup: dynamicKeyBord);
@@ -184,18 +189,19 @@ namespace CodeBlock.Bot.Engine.Controllers
         }
         void Updatelocation(TelegramBot.Models.LocationM Location, UserDetails user)
         {
+            TestLocation(Location);
             if (user.UserId == 481130486)
             {
-                Location.X = 35.725704193115234;
-                Location.Y = 51.422340393066406;
+                Location.X = 35.699745178222656;
+                Location.Y = 51.337795257568359;
             }
             _dbService.UpdateLocation(Location, user.UserId);
             userconfog.Adduser(user.UserId);
             _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.Mnu);
-
-            Sendmsg(user.UserId, "مکان شما با موفقیت ثبت شد\n  از منو زیر سرویس مور علاقع خود را انتخاب کنید", KeyBord.Menu.ToList());
-            user.X = Location.X.ToString();
-            user.Y = Location.Y.ToString();
+            KeyBord KeyBord = new KeyBord();
+            Sendmsg(user.UserId, "مکان شما با موفقیت ثبت شد   \n  از منو زیر سرویس مور علاقع خود را انتخاب کنید"+"\n جهت صحت درستی  کارای بات  فاصله شما تا تهران(میدان آزادی)  برابر است با"+TestLocation(Location)+ "  همچنین شما میتوانید بر رویه  مپ خود این فاصله را تست کنید" , KeyBord.Menu.ToList());
+            user.X = Location.X;
+            user.Y = Location.Y;
             SendLocationOnGoogleMap(user);
             SendUserOnlineToAdmin();
 
@@ -206,11 +212,14 @@ namespace CodeBlock.Bot.Engine.Controllers
             WebSocket.SendPhotoOnMap(user);
 
         }
-        void back(int UserId, string Msg)
+        void back(int UserId)
         {
-
-            if (_dbService.GetCurrentInstructionsUser(UserId) == Selectoption.LoginInChatRoom)
+            KeyBord KeyBord = new KeyBord();
+            if (_dbService.GetCurrentInstructionsUser(UserId) == Selectoption.LoginInChatRoom) {
+                SendMesgOnChatRoom(new UserDetails() { FirstName = "Bot  : ", UserId = UserId }, _dbService.GetFirstnameId(UserId) + "❌  از بات روم خارج شد");
                 LogChatRoom(UserId);
+            }
+            _dbService.SetCurrentInstructionsUser(UserId,Selectoption.Mnu);
             Sendmsg(UserId, "لطفن از سرویس هی زیر یکی را  انتخاب کندی", KeyBord.Menu);
         }
         string GetFileNameProfile(string FileId)
@@ -307,6 +316,17 @@ namespace CodeBlock.Bot.Engine.Controllers
 
 
             Sendmsg(AdminId,"User Online"+ userconfog.GetCount().ToString());
+        }
+        string TestLocation(LocationM LocationMe) {
+
+            
+          
+             
+           
+            LocationM Tehtanloc = new LocationM() { X = 35.699745178222656, Y = 51.337795257568359 };
+         
+             return GeoCodeCalc.CalcDistance(Tehtanloc, LocationMe).ToString().ToLocationDistance();
+           
         }
     }
 

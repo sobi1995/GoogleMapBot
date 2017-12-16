@@ -12,8 +12,8 @@ namespace TelegramBot.Models
         public MaperConfig()
         {
             Mapper.Initialize(cfg => {
-                cfg.CreateMap<Member, UserDetails>().ForMember(d => d.X, opt => opt.MapFrom(src => src.Location.X)).
-                ForMember(d => d.Y, opt => opt.MapFrom(src => src.Location.Y));
+                cfg.CreateMap<Member, UserDetails>().ForMember(d => d.X, opt => opt.MapFrom(src => src.X)).
+                ForMember(d => d.Y, opt => opt.MapFrom(src => src.Y));
 
             });
         }

@@ -23,5 +23,17 @@
             //}
              return double.Parse(ResVal);
         }
+
+        public static string ToLocationDistance(this string Distance) {
+
+           return Distance.Substring(0, Distance.IndexOf("/") +3);
+          
+         
+          
+            
+        }
+
+
+
     }
 }

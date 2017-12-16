@@ -18,10 +18,13 @@ namespace TelegramBot
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Migrations.Configuration>());
+
+
+           
             try
             {
                 Telegram.Bot.Api bot = new Telegram.Bot.Api("438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A");
-                bot.SetWebhook("https://a0152403.ngrok.io/api/Webhook").Wait();
+                bot.SetWebhook("https://6b10f9fc.ngrok.io/api/Webhook").Wait();
                 //UserConfog d = new UserConfog();
                 UserConfog d = Singleton.Instance;
                 d.StartTemeUser();
