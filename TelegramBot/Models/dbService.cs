@@ -208,5 +208,9 @@ namespace GoogleMapBot.Models
             _db.SaveChanges();
 
         }
+        public List<int> GetAllUserid() {
+           
+            return _db.Member.Select(x => x.UserId).ToList();
+        }
     }
 }

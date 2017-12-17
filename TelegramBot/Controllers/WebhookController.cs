@@ -58,6 +58,8 @@ namespace CodeBlock.Bot.Engine.Controllers
                 Instructions = (Selectoption)_dbService.GetCurrentInstructionsUser(update.Message.From.Id);
                 if (update.Message.Text == "من افلاین هستم  🔴")
                     LogOut(update.Message.From.Id, 1);
+                else if (update.Message.Text!=null && update.Message.Text == "بازگشت   🔙")
+                    back(user.UserId);
                 else if (update.Message.Text != null && update.Message.Text.TrimAllSpase() == "بازگشت   🔙".TrimAllSpase())
                     back(user.UserId);
                 else if (Instructions == Selectoption.LoginInChatRoom)
@@ -110,6 +112,7 @@ namespace CodeBlock.Bot.Engine.Controllers
         }
         void SendMesgOnChatRoom(UserDetails user, string Msg)
         {
+             
 
             userconfog.AddTime(user.UserId);
             var userOnChaRoom = _dbService.GetUserOnCharRoom(_dbService.GetCahtRoomidUser(user.UserId));
@@ -121,6 +124,7 @@ namespace CodeBlock.Bot.Engine.Controllers
             _dbService.SaveChat(user.UserId, Msg);
 
         }
+
         void Mnu(string text, UserDetails user)
         {
             if (text.TrimAllSpase() == "👥ساخت چت روم👥".TrimAllSpase()
@@ -184,7 +188,7 @@ namespace CodeBlock.Bot.Engine.Controllers
         }
         void Sendmsg(int UserId, string Msg)
         {
-         
+   
            bot.SendTextMessage(UserId, text: Msg);
         }
         void Updatelocation(TelegramBot.Models.LocationM Location, UserDetails user)
@@ -311,7 +315,6 @@ namespace CodeBlock.Bot.Engine.Controllers
             return Ok("0");
 
         }
-
         void SendUserOnlineToAdmin() {
 
 
@@ -328,6 +331,7 @@ namespace CodeBlock.Bot.Engine.Controllers
              return GeoCodeCalc.CalcDistance(Tehtanloc, LocationMe).ToString().ToLocationDistance();
            
         }
+       
     }
 
 }

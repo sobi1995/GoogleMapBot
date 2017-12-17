@@ -10,7 +10,7 @@ namespace TelegramBot.Models
     {
         public int Id { get; set; }
         public string Msg { get; set; }
-        public virtual Member Member { get; set; }
+ 
         public int MemberId { get; set; }
 
 

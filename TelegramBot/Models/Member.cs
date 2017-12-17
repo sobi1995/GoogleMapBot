@@ -13,7 +13,7 @@ namespace GoogleMapBot.Models
         public int? ChatRoomId { get; set; }
         public string Adrress { get; set; }
         public Selectoption Instructions { get; set; }
-        public virtual List<HistoryChating> HistoryChating { get; set; }
+       
 
 
         public Member(int UserId, string FirstName, string lastName, string UserName)

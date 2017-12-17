@@ -22,9 +22,9 @@ namespace GoogleMapBot.Models
                 HasForeignKey(x => x.ChatRoomId).
                 WillCascadeOnDelete();
 
-            modelBuilder.Entity<Member>().HasMany(x => x.HistoryChating).WithRequired(x => x.Member).
-             HasForeignKey(x => x.MemberId).
-             WillCascadeOnDelete();
+            //modelBuilder.Entity<Member>().HasMany(x => x.HistoryChating).WithRequired(x => x.Member).
+            // HasForeignKey(x => x.MemberId).
+            // WillCascadeOnDelete();
             base.OnModelCreating(modelBuilder);
         }
     }
