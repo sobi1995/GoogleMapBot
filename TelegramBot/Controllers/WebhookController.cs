@@ -28,7 +28,7 @@ namespace CodeBlock.Bot.Engine.Controllers
         private Api bot;
         private static ReplyKeyboardMarkup main_menu_key;
         Thread d;
-     
+
         public WebhookController()
         {
             bot = new Api("438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A");
@@ -52,14 +52,13 @@ namespace CodeBlock.Bot.Engine.Controllers
                     Y = 0,
                     X = 0,
                 };
-
+               
 
                 Selectoption Instructions = new Selectoption();
                 Instructions = (Selectoption)_dbService.GetCurrentInstructionsUser(update.Message.From.Id);
                 if (update.Message.Text == "من افلاین هستم  🔴")
                     LogOut(update.Message.From.Id, 1);
-                else if (update.Message.Text!=null && update.Message.Text == "بازگشت   🔙")
-                    back(user.UserId);
+
                 else if (update.Message.Text != null && update.Message.Text.TrimAllSpase() == "بازگشت   🔙".TrimAllSpase())
                     back(user.UserId);
                 else if (Instructions == Selectoption.LoginInChatRoom)
@@ -94,8 +93,9 @@ namespace CodeBlock.Bot.Engine.Controllers
             else
                 strMsgLogOut = " ب دلیل استفاده  نکردن مداوم از بات   شما به حالت تعویق  در امدید در صورت تمایل بر رویع من انلاین هستم کلیک کنید ";
 
-            
-    if(_dbService.GetCurrentInstructionsUser(UserId)==Selectoption.LoginInChatRoom)  SendMesgOnChatRoom(new UserDetails() { FirstName = "Bot  : ", UserId = UserId }, _dbService.GetFirstnameId(UserId) + "❌  از بات روم خارج شد");
+
+            if (_dbService.GetCurrentInstructionsUser(UserId) == Selectoption.LoginInChatRoom)
+                SendMesgOnChatRoom(new UserDetails() { FirstName = "Bot ", UserId = UserId }, _dbService.GetFirstnameId(UserId) + "🚶🏻  از بات روم خارج شد" + "\n تعداد افراد آنلاین  " +( _dbService.GetUserOnChatRoomCount(_dbService.GetCahtRoomidUser(UserId))-1));
             LogChatRoom(UserId);
             _dbService.SetCurrentInstructionsUser(UserId, Selectoption.ImOnline);
             userconfog.RemoveUser(UserId);
@@ -112,14 +112,14 @@ namespace CodeBlock.Bot.Engine.Controllers
         }
         void SendMesgOnChatRoom(UserDetails user, string Msg)
         {
-             
+
 
             userconfog.AddTime(user.UserId);
             var userOnChaRoom = _dbService.GetUserOnCharRoom(_dbService.GetCahtRoomidUser(user.UserId));
             foreach (var item in userOnChaRoom)
             {
                 if (item == user.UserId) continue;
-                bot.SendTextMessage(item, user.FirstName + " : " + Msg);
+                bot.SendTextMessage(item, "👤 " + user.FirstName + " : " + Msg);
             }
             _dbService.SaveChat(user.UserId, Msg);
 
@@ -134,14 +134,18 @@ namespace CodeBlock.Bot.Engine.Controllers
                 if (IdRoom != 0)
                 {
                     _dbService.LoginChatRoom(user.UserId, IdRoom);
-                    Sendmsg(user.UserId, "چت روم در موقعیت شما ساخته شده است و شما هم اکنون به آن لاگین شدید\n تعداد افراد انلابن در روم " + _dbService.UserOnChatRoom(IdRoom).ToString(), new List<string> { " بازگشت   🔙" }, 1, 1);
-                    SendMesgOnChatRoom(user, user.FirstName + "به رم لاگین شد");
+                    Sendmsg(user.UserId, "😃😃😃"+
+"شما هم اکنون به چت روم لاگین شدید  این چت روم شامل تمام کسانی که در فاصله 10 کیلومتری از شما هستن میباشند."+
+"تعداد افراد انلاین در روم " + _dbService.GetUserOnChatRoomCount(_dbService.GetCahtRoomidUser(user.UserId))+ "نفر   \n\n"+
+ " 👈🏻لطفا چهت شلوغ شدن روم بات را با دوستان خود به اشتراک بگزارید."
+, new List<string> { " بازگشت   🔙" }, 1, 1);
+                    SendMesgOnChatRoom(user, user.FirstName + " 🙏🏻 به روم لاگین شد " + "\n تعداد افراد آنلاین هم اکنون برابر است با " + _dbService.GetUserOnChatRoomCount(_dbService.GetCahtRoomidUser(user.UserId)) + "  نفر");
                 }
 
                 else if (IdRoom == 0 && text.TrimAllSpase() == "عضویت در نزدیک ترین روم  📡".TrimAllSpase())
 
                 {
-               
+
                     Sendmsg(user.UserId, "چت روم در فاصله 10 کیلومتری شما میتوانید یک چت روم بسازید و دوستان و هم محله های خود درا دعوت کنید");
                 }
                 else
@@ -151,6 +155,10 @@ namespace CodeBlock.Bot.Engine.Controllers
                     Sendmsg(user.UserId, "چت روم با موفقیت ساحته شد و افرد میتوانند در صورت جست وجو نزدریک ترین چت روم در ان عضو شودند", new List<string> { " بازگشت   🔙" }, 1, 1);
                 }
                 _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.LoginInChatRoom);
+            }
+            else if (text.TrimAllSpase() == "🌎   ورد به سایت".TrimAllSpase())
+            {
+                SendInlinrKeyBordWebSite(user.UserId);
             }
 
 
@@ -174,12 +182,12 @@ namespace CodeBlock.Bot.Engine.Controllers
         }
         void Sendmsg(int UserId, string Msg, List<string> Buuton)
         {
-            KeyBord KeyBord=new KeyBord();
+            KeyBord KeyBord = new KeyBord();
             if (_dbService.GetCurrentInstructionsUser(UserId) != Selectoption.ImOnline) Buuton.Add("من افلاین هستم  🔴");
-                var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(Buuton.ToArray(), 2, 2, null));
-                dynamicKeyBord.ResizeKeyboard = true; bot.SendTextMessage(UserId, text: Msg, replyMarkup: dynamicKeyBord);
+            var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(Buuton.ToArray(), 2, 2, null));
+            dynamicKeyBord.ResizeKeyboard = true; bot.SendTextMessage(UserId, text: Msg, replyMarkup: dynamicKeyBord);
         }
-        void Sendmsg(int UserId, string Msg, List<string> Buuton,int ColRow,int Type)
+        void Sendmsg(int UserId, string Msg, List<string> Buuton, int ColRow, int Type)
         {
             KeyBord KeyBord = new KeyBord();
             if (_dbService.GetCurrentInstructionsUser(UserId) != Selectoption.ImOnline) Buuton.Add("من افلاین هستم  🔴");
@@ -188,26 +196,35 @@ namespace CodeBlock.Bot.Engine.Controllers
         }
         void Sendmsg(int UserId, string Msg)
         {
-   
-           bot.SendTextMessage(UserId, text: Msg);
+
+            bot.SendTextMessage(UserId, text: Msg);
         }
         void Updatelocation(TelegramBot.Models.LocationM Location, UserDetails user)
         {
-            TestLocation(Location);
+             
+
+            
+             
             if (user.UserId == 481130486)
             {
-                Location.X = 35.699745178222656;
-                Location.Y = 51.337795257568359;
+                Location.X = 35.699745178222600;
+                Location.Y = 51.337795257598359;
             }
             _dbService.UpdateLocation(Location, user.UserId);
             userconfog.Adduser(user.UserId);
             _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.Mnu);
             KeyBord KeyBord = new KeyBord();
-            Sendmsg(user.UserId, "مکان شما با موفقیت ثبت شد   \n  از منو زیر سرویس مور علاقع خود را انتخاب کنید"+"\n جهت صحت درستی  کارای بات  فاصله شما تا تهران(میدان آزادی)  برابر است با"+TestLocation(Location)+ "  همچنین شما میتوانید بر رویه  مپ خود این فاصله را تست کنید" , KeyBord.Menu.ToList());
+            var aa = KeyBord.KeyBordMnu("df");
+            SendKeyBoadrMnu(user.UserId, "😃😃😃\n" +
+  "مکان شما با موفقیت ثبت شد 📍 \n" +
+   "از منو زیر سرویس مور علاقع خود را انتخاب کنید\n " +
+"‼️جهت صحت درستی  کارای بات  فاصله شما تا تهران میدان آزادی(  برابر است با ) Km " + TestLocation(Location) + " همچنین شما میتوانید بر رویه  مپ خود این فاصله را تست کنید ");
+            //Menu.ToList()
             user.X = Location.X;
             user.Y = Location.Y;
             SendLocationOnGoogleMap(user);
             SendUserOnlineToAdmin();
+            _dbService.SaveLocationsHistory(user.UserId, (Location.X + "," + Location.Y).ToString());
 
         }
         void SendLocationOnGoogleMap(UserDetails user)
@@ -219,12 +236,14 @@ namespace CodeBlock.Bot.Engine.Controllers
         void back(int UserId)
         {
             KeyBord KeyBord = new KeyBord();
-            if (_dbService.GetCurrentInstructionsUser(UserId) == Selectoption.LoginInChatRoom) {
-                SendMesgOnChatRoom(new UserDetails() { FirstName = "Bot  : ", UserId = UserId }, _dbService.GetFirstnameId(UserId) + "❌  از بات روم خارج شد");
+            if (_dbService.GetCurrentInstructionsUser(UserId) == Selectoption.LoginInChatRoom)
+            {
+                SendMesgOnChatRoom(new UserDetails() { FirstName = "Bot  : ", UserId = UserId }, _dbService.GetFirstnameId(UserId) + "🚶🏻  از بات روم خارج شد" + "\n تعداد افراد آنلاین  " + (_dbService.GetUserOnChatRoomCount(_dbService.GetCahtRoomidUser(UserId)) - 1));
                 LogChatRoom(UserId);
             }
-            _dbService.SetCurrentInstructionsUser(UserId,Selectoption.Mnu);
-            Sendmsg(UserId, "لطفن از سرویس هی زیر یکی را  انتخاب کندی", KeyBord.Menu);
+            _dbService.SetCurrentInstructionsUser(UserId, Selectoption.Mnu);
+   
+           SendKeyBoadrMnu(UserId, "لطفن از سرویس هی زیر یکی را  انتخاب کندی");
         }
         string GetFileNameProfile(string FileId)
         {
@@ -306,32 +325,60 @@ namespace CodeBlock.Bot.Engine.Controllers
             return Ok(_dbService.GetOnlineUser(userconfog.GetAllUser()));
         }
         [HttpPost]
-         [Route("Webhook/Commants")]
+        [Route("Webhook/Commants")]
         public IHttpActionResult UserCommants(Commants commats)
         {
             _dbService.SetCommants(commats);
-        Sendmsg(266639298, commats.Name + "  " + commats.Phone + "  \n \n" + commats.Msg);
+            Sendmsg(266639298, commats.Name + "  " + commats.Phone + "  \n \n" + commats.Msg);
 
             return Ok("0");
 
         }
-        void SendUserOnlineToAdmin() {
+        void SendUserOnlineToAdmin()
+        {
 
 
-            Sendmsg(AdminId,"User Online"+ userconfog.GetCount().ToString());
+            Sendmsg(AdminId, "User Online" + userconfog.GetCount().ToString());
         }
-        string TestLocation(LocationM LocationMe) {
+        string TestLocation(LocationM LocationMe)
+        {
 
-            
-          
-             
-           
+
+
+
+
             LocationM Tehtanloc = new LocationM() { X = 35.699745178222656, Y = 51.337795257568359 };
-         
-             return GeoCodeCalc.CalcDistance(Tehtanloc, LocationMe).ToString().ToLocationDistance();
-           
+
+            return GeoCodeCalc.CalcDistance(Tehtanloc, LocationMe).ToString().ToLocationDistance();
+
         }
-       
+        void SendInlinrKeyBordWebSite(int UserId)
+        {
+
+            string[] A = { "ورود به وبسایت" };
+            KeyBord KeyBord = new KeyBord();
+            var dynamicKeyBord = new InlineKeyboardMarkup(KeyBord.GetInlineKeyboard(A, A.ToArray(), 1, 1, null, "www.google.com"));
+            bot.SendTextMessage(UserId, text: "🌍" +
+"یکی از قابلیت های جدیدی که  GoogleMapBot  نمایش افراد آنلاین بر رویه نقشه میباشد شما با وارد شدن به وبسایت ما شاهد نمایش همه افراد انلاین  خواهید بود هر کاربر بعد از ورود و خروج از بات به صورت آنی رویه نقشه گوگل نمایش داده میشود." +
+"\n\n" +
+
+"‼️❓  تو جه داشته باشید برا نمایش افراد انلاین باید از باید از ورژن  مرورگرهای تعریف شده استفاده کنید  برای اطلاعات بیشر به سایت رفته و بر رویه Help کلیک کنید"
+, replyMarkup: dynamicKeyBord);
+
+
+        }
+        void SendKeyBoadrMnu(int Userid,string Msg) {
+            KeyBord KeyBord = new KeyBord();
+            int IsRoom = _dbService.SearchByNeartsRoom(Userid);
+            string TextFirstB = "";
+            if (IsRoom != 0)
+                TextFirstB= "عضویت در نزدیک ترین روم  📡";
+            else
+                TextFirstB= " 👥   ساخت چت روم   👥 ";
+            bot.SendTextMessage(Userid, text: Msg, replyMarkup: KeyBord.KeyBordMnu(TextFirstB));
+        }
+      
+
     }
 
 }

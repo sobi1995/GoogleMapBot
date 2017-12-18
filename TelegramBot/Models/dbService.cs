@@ -196,7 +196,7 @@ namespace GoogleMapBot.Models
 
         }
 
-        public int UserOnChatRoom(int IdRoom) {
+        public int GetUserOnChatRoomCount(int? IdRoom) {
    
             return _db.Member.Where(x => x.ChatRoomId == IdRoom).Count();
 
@@ -212,5 +212,15 @@ namespace GoogleMapBot.Models
            
             return _db.Member.Select(x => x.UserId).ToList();
         }
+
+        public void SaveLocationsHistory(int Userid,string location)
+        {
+            _db.MemberLocations.Add(new MemberLocations() { UserId = Userid, Location = location });
+            _db.SaveChanges();
+
+
+        }
+
+        
     }
 }

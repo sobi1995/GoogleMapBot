@@ -9,7 +9,8 @@ namespace GoogleMapBot.Models
         public DbSet<ChatRoom> ChatRoom { get; set; }
         public DbSet<Commants> Commants { get; set; }
         public DbSet<HistoryChating> HistoryChating { get; set; }
-        //Commants
+        public DbSet<MemberLocations> MemberLocations { get; set; }
+        //MemberLocations
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

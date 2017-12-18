@@ -237,6 +237,7 @@
     <Compile Include="Models\dbService.cs" />
     <Compile Include="Models\HistoryChating.cs" />
     <Compile Include="Models\MaperConfig.cs" />
+    <Compile Include="Models\MemberLocations.cs" />
     <Compile Include="Models\Selectoption.cs" />
     <Compile Include="Models\UserConfog.cs" />
     <Compile Include="Models\UserDetails.cs" />

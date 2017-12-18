@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace GoogleMapBot.Models
 {
@@ -90,8 +91,37 @@ namespace GoogleMapBot.Models
             return keyboardInline;
         }
 
-        public   List<string> Menu = new List<string>() { "👥   ساخت چت روم   👥 ", "عضویت در نزدیک ترین روم  📡", "ورد به سایت",  "درباره بات" };
+     public   ReplyKeyboardMarkup KeyBordMnu(string FirstB)
+        {
+            ReplyKeyboardMarkup mainMenu = new ReplyKeyboardMarkup();
+            mainMenu.ResizeKeyboard = true;
+            mainMenu.Selective = true;
+            mainMenu.Keyboard =
+               new KeyboardButton[][]
+               {   new KeyboardButton[]
+        {
 
+             new KeyboardButton(FirstB),
+
+
+        },
+
+          new KeyboardButton[]
+        {
+            new KeyboardButton("🌎   ورد به سایت"),
+            new KeyboardButton("📱   درباره ما "),
+
+
+        },
+
+            new KeyboardButton[]
+        {
+            new KeyboardButton("من افلاین هستم  🔴"),
+
+        },
+               };
+            return mainMenu;
+        }
     }
 
      
