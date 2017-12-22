@@ -24,9 +24,13 @@ namespace TelegramBot.Models
 
         public void Adduser(int UserId)
         {
+            if(!ExsistUser(UserId))
      userDic.Add(UserId, 200);
         }
+        bool ExsistUser(int Userid) {
 
+            return userDic.Where(x => x.Key.Equals(Userid)).Any();
+        }
         public void RemoveUser(int UserId)
         {
      
@@ -73,7 +77,7 @@ namespace TelegramBot.Models
             userDic[UserId] = userDic[UserId]+5;
         }
        public List<int> GetAllUser() {
-            var a= userDic.Select(x => x.Key).ToList();
+          
             return userDic.Select(x => x.Key).ToList();
 
         }

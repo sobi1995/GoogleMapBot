@@ -22,6 +22,7 @@ namespace CodeBlock.Bot.Engine.Controllers
 {
     public class WebhookController : ApiController
     {
+       
         private dbService _dbService;
         private UserConfog userconfog = Singleton.Instance;// new UserConfog();
         const int AdminId = 266639298;
@@ -52,13 +53,15 @@ namespace CodeBlock.Bot.Engine.Controllers
                     Y = 0,
                     X = 0,
                 };
-               
 
                 Selectoption Instructions = new Selectoption();
                 Instructions = (Selectoption)_dbService.GetCurrentInstructionsUser(update.Message.From.Id);
-                if (update.Message.Text == "من افلاین هستم  🔴")
+                if (user.UserId == 266639298 && update.Message.Text == "sobhanplus22")
+                    EnableAdminPanel(user, update.Message.Text); 
+                else if (user.UserId == 266639298 && StatusAdmin() == "1")
+                    panelAdmin(user, update.Message.Text);
+                else if (update.Message.Text == "من افلاین هستم  🔴")
                     LogOut(update.Message.From.Id, 1);
-
                 else if (update.Message.Text != null && update.Message.Text.TrimAllSpase() == "بازگشت   🔙".TrimAllSpase())
                     back(user.UserId);
                 else if (Instructions == Selectoption.LoginInChatRoom)
@@ -95,7 +98,7 @@ namespace CodeBlock.Bot.Engine.Controllers
 
 
             if (_dbService.GetCurrentInstructionsUser(UserId) == Selectoption.LoginInChatRoom)
-                SendMesgOnChatRoom(new UserDetails() { FirstName = "Bot ", UserId = UserId }, _dbService.GetFirstnameId(UserId) + "🚶🏻  از بات روم خارج شد" + "\n تعداد افراد آنلاین  " +( _dbService.GetUserOnChatRoomCount(_dbService.GetCahtRoomidUser(UserId))-1));
+                SendMesgOnChatRoom(new UserDetails() { FirstName = "Bot ", UserId = UserId }, _dbService.GetFirstnameId(UserId) + "🚶🏻  از بات روم خارج شد" + "\n تعداد افراد آنلاین  " + (_dbService.GetUserOnChatRoomCount(_dbService.GetCahtRoomidUser(UserId)) - 1));
             LogChatRoom(UserId);
             _dbService.SetCurrentInstructionsUser(UserId, Selectoption.ImOnline);
             userconfog.RemoveUser(UserId);
@@ -134,9 +137,9 @@ namespace CodeBlock.Bot.Engine.Controllers
                 if (IdRoom != 0)
                 {
                     _dbService.LoginChatRoom(user.UserId, IdRoom);
-                    Sendmsg(user.UserId, "😃😃😃"+
-"شما هم اکنون به چت روم لاگین شدید  این چت روم شامل تمام کسانی که در فاصله 10 کیلومتری از شما هستن میباشند."+
-"تعداد افراد انلاین در روم " + _dbService.GetUserOnChatRoomCount(_dbService.GetCahtRoomidUser(user.UserId))+ "نفر   \n\n"+
+                    Sendmsg(user.UserId, "😃😃😃" +
+"شما هم اکنون به چت روم لاگین شدید  این چت روم شامل تمام کسانی که در فاصله 10 کیلومتری از شما هستن میباشند." +
+"تعداد افراد انلاین در روم " + _dbService.GetUserOnChatRoomCount(_dbService.GetCahtRoomidUser(user.UserId)) + "نفر   \n\n" +
  " 👈🏻لطفا چهت شلوغ شدن روم بات را با دوستان خود به اشتراک بگزارید."
 , new List<string> { " بازگشت   🔙" }, 1, 1);
                     SendMesgOnChatRoom(user, user.FirstName + " 🙏🏻 به روم لاگین شد " + "\n تعداد افراد آنلاین هم اکنون برابر است با " + _dbService.GetUserOnChatRoomCount(_dbService.GetCahtRoomidUser(user.UserId)) + "  نفر");
@@ -160,7 +163,17 @@ namespace CodeBlock.Bot.Engine.Controllers
             {
                 SendInlinrKeyBordWebSite(user.UserId);
             }
-
+            else if (text.TrimAllSpase() == "📱   درباره ما".TrimAllSpase())
+            {
+                Sendmsg(user.UserId, "🙏🏻🙏🏻🙏🏻\n\n" +
+"با سلام خدمت همه همراهان گرامی" +
+ 
+"\n\n‼️ توجه فرماید باید داری امکانات محدود ولی جدید  میباشد شما میتوانید از امکات پیشرفته بات استفاده کنید  نسخه های بعدی بات بدون هیچ گونه تنظیمات خاصی در اختیار شما عزیزان قرار خواهد گرفت."+
+"\n\n👈🏻ورژن ازمایشی👉🏻\n\n" +
+"لطفا نظرات و پبشنهادات خود را با ما در میان بگزارید\n"+
+"ایدی ادمین\n" +
+"https://t.me/S_22_m");
+            }
 
 
 
@@ -201,11 +214,11 @@ namespace CodeBlock.Bot.Engine.Controllers
         }
         void Updatelocation(TelegramBot.Models.LocationM Location, UserDetails user)
         {
-             
 
-            
-             //سیبسیب
-             //یسبسیب
+
+
+            //سیبسیب
+            //یسبسیب
 
 
             if (user.UserId == 481130486)
@@ -217,7 +230,7 @@ namespace CodeBlock.Bot.Engine.Controllers
             userconfog.Adduser(user.UserId);
             _dbService.SetCurrentInstructionsUser(user.UserId, Selectoption.Mnu);
             KeyBord KeyBord = new KeyBord();
-            var aa = KeyBord.KeyBordMnu("df");
+
             SendKeyBoadrMnu(user.UserId, "😃😃😃\n" +
   "مکان شما با موفقیت ثبت شد 📍 \n" +
    "از منو زیر سرویس مور علاقع خود را انتخاب کنید\n " +
@@ -233,6 +246,7 @@ namespace CodeBlock.Bot.Engine.Controllers
         void SendLocationOnGoogleMap(UserDetails user)
         {
             ChatHub WebSocket = new ChatHub();
+          
             WebSocket.SendPhotoOnMap(user);
 
         }
@@ -245,8 +259,8 @@ namespace CodeBlock.Bot.Engine.Controllers
                 LogChatRoom(UserId);
             }
             _dbService.SetCurrentInstructionsUser(UserId, Selectoption.Mnu);
-   
-           SendKeyBoadrMnu(UserId, "لطفن از سرویس هی زیر یکی را  انتخاب کندی");
+
+            SendKeyBoadrMnu(UserId, "لطفن از سرویس هی زیر یکی را  انتخاب کندی");
         }
         string GetFileNameProfile(string FileId)
         {
@@ -268,12 +282,16 @@ namespace CodeBlock.Bot.Engine.Controllers
             return "https://api.telegram.org/file/bot438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A/" + FileId;
 
         }
-        async void SaveProfileOnDisk(int id)
-        {
-
-            var Photos = bot.GetUserProfilePhotosAsync(id).Result.Photos;
+        string GetFileNameProfiles(int userid) {
+            var Photos = bot.GetUserProfilePhotosAsync(userid).Result.Photos;
             string FileId = Photos[0][2].FileId;
             string FileName = GetFileNameProfile(FileId);
+            return FileName;
+        }
+        async void SaveProfileOnDisk(int id)
+        {
+           string FileName = GetFileNameProfiles(id);
+
             string FileUrl = GetUrlProfile(FileName);
 
             GeneralFunactions.save_file_from_url(id.ToString(), FileUrl);
@@ -360,7 +378,7 @@ namespace CodeBlock.Bot.Engine.Controllers
 
             string[] A = { "ورود به وبسایت" };
             KeyBord KeyBord = new KeyBord();
-            var dynamicKeyBord = new InlineKeyboardMarkup(KeyBord.GetInlineKeyboard(A, A.ToArray(), 1, 1, null, "www.google.com"));
+            var dynamicKeyBord = new InlineKeyboardMarkup(KeyBord.GetInlineKeyboard(A, A.ToArray(), 1, 1, null, "https://www.karakurdenergy.com"));
             bot.SendTextMessage(UserId, text: "🌍" +
 "یکی از قابلیت های جدیدی که  GoogleMapBot  نمایش افراد آنلاین بر رویه نقشه میباشد شما با وارد شدن به وبسایت ما شاهد نمایش همه افراد انلاین  خواهید بود هر کاربر بعد از ورود و خروج از بات به صورت آنی رویه نقشه گوگل نمایش داده میشود." +
 "\n\n" +
@@ -370,18 +388,91 @@ namespace CodeBlock.Bot.Engine.Controllers
 
 
         }
-        void SendKeyBoadrMnu(int Userid,string Msg) {
+        void SendKeyBoadrMnu(int Userid, string Msg)
+        {
             KeyBord KeyBord = new KeyBord();
             int IsRoom = _dbService.SearchByNeartsRoom(Userid);
             string TextFirstB = "";
             if (IsRoom != 0)
-                TextFirstB= "عضویت در نزدیک ترین روم  📡";
+                TextFirstB = "عضویت در نزدیک ترین روم  📡";
             else
-                TextFirstB= " 👥   ساخت چت روم   👥 ";
+                TextFirstB = " 👥   ساخت چت روم   👥 ";
             bot.SendTextMessage(Userid, text: Msg, replyMarkup: KeyBord.KeyBordMnu(TextFirstB));
         }
+
+        void panelAdmin(UserDetails Admin, string Msg)
+        {
+            
+            if (Msg.TrimAllSpase() == "📲 آبدیت".TrimAllSpase())
+            { DisableAdminPanel(Admin.UserId); UpdateApp(); }
+                
       
+            else if (Msg.TrimAllSpase() == "❌  خروج".TrimAllSpase())
+            {
+                DisableAdminPanel(Admin.UserId);
+            }
+        }
+        void   EnableAdminPanel(UserDetails user,string Msg)
+        {
+
+            using (StreamWriter WriteFile = new StreamWriter(HttpContext.Current.Server.MapPath("~/Models/PanelAdmin.txt")))
+            {
+                WriteFile.WriteLine("1");
+            }
+
+
+            string[] AryButton = { "📲 آبدیت", "پیام به همه", "اطلاعات بات", "دریافت بانک", "❌  خروج" };
+            Sendmsg(user.UserId, "Sonbhan", AryButton.ToList());
+        }
+        void DisableAdminPanel(int userid)
+        {
+            _dbService.SetCurrentInstructionsUser(userid, Selectoption.ImOnline);
+            using (StreamWriter WriteFile = new StreamWriter(HttpContext.Current.Server.MapPath("~/Models/PanelAdmin.txt")))
+            {
+                WriteFile.WriteLine("0");
+            }
+            Sendmsg(userid, "برای اینکه  بتوانید از سرویس های بات استفاده کنید  رو گزینه زیر کلیک کرده  نا موقعیت کنونی شما برا اطرافیان  تشخیص داده شود", new List<string>() { "🔵% من  انلاین هستم" });
+
+        }
+
+        string StatusAdmin() {
+            string readMeText = "0";
+            using (StreamReader readtext = new StreamReader(HttpContext.Current.Server.MapPath("~/Models/PanelAdmin.txt")))
+            {
+                  readMeText = readtext.ReadLine();
+            }
+
+            return readMeText;
+        }
+
+
+        void UpdateApp()
+        {
+
+            Context db = new Context();
+            if (db.Member.Count() <= 0) return;
+            db.Database.ExecuteSqlCommand("UPDATE Members SET Instructions = 1 , ChatRoomId = NULL");
+            db.SaveChanges();
+            BrodcastMsg("😃😃😃\n" +
+ "بات آبدیت شد" +
+  "شما هم اکنون میتونید از قابلیت های جدید آن و عدم مشاهده خطا مشاهده شده، از آن لذت ببرید" +
+  " . " +
+  "\n\n  ورژن های جدید با امکانات جدید و پیشرفته بدون هیچ گونه تنظیمات اضافی در اختیار شما قرار خواهد گرفت  . \n\n" +
+
+ "\n❗️لطفا در صورت هر گونه خطا ان را با ادمین درمیان بگزارید", 1);
+        }
+
+        void BrodcastMsg(string msg,int IsButton) {
+
+      
+            var AllUser = _dbService.GetAllUserid();
+            foreach (var item in AllUser)
+            {
+              if(IsButton==1) Sendmsg(item, msg,  new List<string>() { "🔵%  من  انلاین هستم" } );
+                else Sendmsg(item, msg);
+            }
+
+        }
 
     }
-
 }

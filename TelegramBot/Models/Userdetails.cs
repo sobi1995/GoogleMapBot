@@ -1,4 +1,6 @@
-﻿namespace TelegramBot.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TelegramBot.Models
 {
     public class UserDetails
     {
@@ -8,6 +10,7 @@
         public string Username { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
+    
 
     }
 }

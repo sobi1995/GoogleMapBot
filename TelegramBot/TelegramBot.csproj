@@ -180,13 +180,11 @@
     <Content Include="Help\JavaScript.js" />
     <Content Include="Help\TextFile1.txt" />
     <Content Include="Chat.html" />
-    <Content Include="ImgProfiles\photo_۲۰۱۷-۰۹-۱۹_۰۵-۱۰-۳۸ %282%29.jpg" />
-    <Content Include="ImgProfiles\Profile266639298.jpg" />
-    <Content Include="ImgProfiles\Untitled-1.gif" />
+    <Content Include="Models\PanelAdmin.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="packages.config" />
-    <None Include="Properties\PublishProfiles\baran.pubxml" />
+    <None Include="Properties\PublishProfiles\TelegramBot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Entity\GooogleMapBot.js" />
     <Content Include="Scripts\Entity\Telegram.js" />
@@ -204,7 +202,9 @@
     <None Include="Scripts\_references.js" />
     <Content Include="Index.html" />
     <Content Include="template\CSS\StyleIndex.css" />
+    <Content Include="template\download %281%29.png" />
     <Content Include="template\img\download.jpg" />
+    <Content Include="template\img\download.png" />
     <Content Include="template\img\images %281%29.jpg" />
     <Content Include="template\img\images %282%29.jpg" />
     <Content Include="template\img\images %283%29.jpg" />
@@ -262,6 +262,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ImgProfiles\" />
     <Folder Include="Views\Webhook\" />
   </ItemGroup>
   <ItemGroup>

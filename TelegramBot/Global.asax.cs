@@ -26,9 +26,9 @@ namespace TelegramBot
            
             try
             {
-            UpdateApp();
+      
                 Telegram.Bot.Api bot = new Telegram.Bot.Api("438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A");
-                bot.SetWebhook("https://7095171b.ngrok.io/api/Webhook").Wait();
+                bot.SetWebhook("https://16a32b00.ngrok.io/api/Webhook").Wait();
                 //UserConfog d = new UserConfog();
                 UserConfog d = Singleton.Instance;
                 d.StartTemeUser();
@@ -41,40 +41,7 @@ namespace TelegramBot
         }
 
 
-        public void UpdateApp()
-        {
-
-
-            Context db = new Context();
-            if (db.Member.Count() <= 0) return;
-            db.Database.ExecuteSqlCommand("UPDATE Members SET Instructions = 1 , ChatRoomId = NULL");
-            db.SaveChanges();
-            BrodCastMsgToUpdate();
-
-        }
-        public void BrodCastMsgToUpdate()
-        {
-            KeyBord KeyBord = new KeyBord();
-            string []A = { "🔵%  من  انلاین هستم" };
-            var dynamicKeyBord = new ReplyKeyboardMarkup(KeyBord.GetReplyKeyboardMarkup(A,1, 0, null));
-            dynamicKeyBord.ResizeKeyboard = true;
-            Telegram.Bot.Api bot = new Telegram.Bot.Api("438518161:AAG5xVKFbV4uLf_6CtbyocQhbBv7hHLyL5A");
-            dbService _dbService = new dbService();
-            var AllUser = _dbService.GetAllUserid();
-            foreach (var item in AllUser)
-            {
-                bot.SendTextMessage(item, "😃😃😃\n" +
- "بات آبدیت شد"+
-  "شما هم اکنون میتونید از قابلیت های جدید آن و عدم مشاهده خطا مشاهده شده، از آن لذت ببرید" +
-  " . "+
-  "\n\n  ورژن های جدید با امکانات جدید و پیشرفته بدون هیچ گونه تنظیمات اضافی در اختیار شما قرار خواهد گرفت  . \n\n"+
-
- "\n❗️لطفا در صورت هر گونه خطا ان را با ادمین درمیان بگزارید", replyMarkup: dynamicKeyBord);
-            }
-
-
-
-        }
+ 
 
         //public override void Init()
         //{
