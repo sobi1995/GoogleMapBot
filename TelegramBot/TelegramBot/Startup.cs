@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Owin;
+
 using Owin;
 using Microsoft.AspNet.SignalR;
 
-[assembly: OwinStartup(typeof(TelegramBot.Startup))]
+//[assembly: OwinStartup(typeof(TelegramBot.Startup))]
 
 namespace TelegramBot
 {

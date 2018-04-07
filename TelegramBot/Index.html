@@ -317,7 +317,7 @@
           var infoWindow = new google.maps.InfoWindow();
           var myLatLng = { lat: parseFloat(x), lng: parseFloat(y) };
           var icon = {
-              url: "https://karakurdenergy.com/ImgProfiles/Profile" + Details.UserId + ".jpg",
+              url: "https://114c25f2.ngrok.io/ImgProfiles/Profile" + Details.UserId + ".jpg",
               scaledSize: new google.maps.Size(38 , 38), // scaled size
               origin: new google.maps.Point(0, 0), // origin
               anchor: new google.maps.Point(0,0), // anchor
@@ -339,7 +339,7 @@
               document.getElementById('id01').style.display = 'block';
          
               v 
-              $("#Avatar").attr('src', "https://karakurdenergy.com/ImgProfiles/Profile" + this.content.UserId + ".jpg");
+              $("#Avatar").attr('src', "https://114c25f2.ngrok.io/ImgProfiles/Profile" + this.content.UserId + ".jpg");
               $("#FirstName").html(this.content.FirstName);
               
               $("#LastName").html(this.content.LastName);
@@ -354,7 +354,7 @@
       $(document).ready(function () {
 
           $.ajax({
-              url: 'https://karakurdenergy.com/api/Webhook/GetUserOnlineOnMap',
+              url: 'https://114c25f2.ngrok.io/api/Webhook/GetUserOnlineOnMap',
 
               success: function (data) {
                   if (data == 0) return;
@@ -371,7 +371,7 @@
              
               var datacommants={ Name: $("#Name").val(), Phone: $("#Phone").val(), Msg: $("#Msg").val(),id:0 };
               $.ajax({
-                  url: 'https://karakurdenergy.com/Webhook/Commants',
+                  url: 'https://114c25f2.ngrok.io/Webhook/Commants',
                   type: "POST",
                   contentType: "application/json",
                   dataType: "json",
